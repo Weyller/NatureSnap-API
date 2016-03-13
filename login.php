@@ -21,7 +21,4 @@
 		$_SESSION['username'] = $result['username'];
 		$_SESSION['user_id'] = $result['user_id'];
 		echo "success";
-	}	
-	
-
-?>
+	}
