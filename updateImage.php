@@ -61,20 +61,17 @@
 				
 			    $stmt = $dbConn->prepare($sql);
 			    $stmt->execute($namedParameters);  
-				echo "Success";
+				echo "success";
 			}
 			else {
-				echo "You can only edit your own photos.";
+				echo "unauthorized";
 			}
 			}
 	else{
-		echo "Invalid";
+		echo "invalid";
 	}
 		}
 //No parameters provided
 else{
-	echo "Invalid";
+	echo "invalid";
 }
-		
- 	
-?>
