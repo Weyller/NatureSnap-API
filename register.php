@@ -20,14 +20,14 @@
 			$namedParameters[":password"] = $password;
 		    $stmt = $dbConn->prepare($sql);
 		    $stmt->execute($namedParameters);   
-	        echo "Registration Successful";
+	        echo "success";
 		}
 		else {
-			echo "Email or username has already been used.";
+			echo "exists";
 		}
 	}
     else {
-        echo "You must complete all fields.";
+        echo "invalid";
     }
 
 //Check if username or email already exist
