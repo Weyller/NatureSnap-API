@@ -31,5 +31,3 @@
 			 'success' => false
 		));
 	}
-	
-?>
