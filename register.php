@@ -49,5 +49,3 @@ function userExist ($username,$email){
 		}
 		
 }
-
-	?>
