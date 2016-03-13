@@ -29,7 +29,7 @@
 				
 				//Check if file in user folder already exists
 				if(file_exists( $target_dir."/". $_SESSION['username'] . "/" . basename($_FILES['filename']['name'] ))){
-					echo "Image already exists.";
+					echo "exists";
 				}
 				else {
 					//Move file into the user folder
@@ -44,17 +44,17 @@
 					$namedParameters[':description'] = $description;
 				    $stmt = $dbConn->prepare($sql);
 				    $stmt->execute($namedParameters);  
-					echo "Success.";
+					echo "success:".$dbConn->lastInsertId();
 				
 				}
 			}
 		}
 		else {
-			echo "Nothing to upload.";
+			echo "nothing";
 		}
     }
 	else {
-		echo "Invalid";
+		echo "invalid";
 	}
 
 ?>
