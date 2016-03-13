@@ -40,8 +40,3 @@
 else {
 	echo "invalid";
 }
-
-
-		
- 	
-?>
