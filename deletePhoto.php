@@ -30,15 +30,15 @@
 		
 	    $stmt = $dbConn->prepare($sql);
 	    $stmt->execute($namedParameters);  
-		echo "Success";
+		echo "success";
 	}
 	else {
-		echo "You can only delete your own photos.";
+		echo "unauthorized";
 	}
 
 }
 else {
-	echo "Invalid";
+	echo "invalid";
 }
 
 
