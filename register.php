@@ -9,7 +9,7 @@
 		&& preg_match('/([a-zA-Z0-9]+)/s', $_POST['username'])
 		&& !empty($_POST['password']) 
 		&& !empty($_POST['email'])
-		&& preg_match('/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6}\b/i', $_POST['email'])) {
+		&& preg_match('/\A\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6}\b\z/i', $_POST['email'])) {
 			$firstName = $_POST['name'];
 			$lastName = $_POST['last_name'];
 			$email = $_POST['email'];
