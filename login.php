@@ -1,6 +1,6 @@
 <?php
 		session_start();
-		require 'db.php';
+		require '../db.php';
 		$dbConn = getConnection();
 		$username = $_POST['username'];
 		$password = sha1($_POST['password']);
