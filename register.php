@@ -1,5 +1,5 @@
 <?php
-	require 'db.php';
+	require '../db.php';
 	$dbConn = getConnection();	
 	if(!empty($_POST['name']) && !empty($_POST['last_name']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['email'])) {
 		$firstName = $_POST['name'];
