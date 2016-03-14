@@ -1,6 +1,6 @@
 <?php
 	header('Content-type: application/json');
-	require 'db.php';
+	require '../db.php';
 	$dbConn = getConnection();	
 	$limit = $_GET['limit'];
 	if($_GET['limit']){
