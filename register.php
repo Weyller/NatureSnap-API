@@ -1,27 +1,33 @@
 <?php
 	require '../db.php';
 	$dbConn = getConnection();	
-	if(!empty($_POST['name']) && !empty($_POST['last_name']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['email'])) {
-		$firstName = $_POST['name'];
-		$lastName = $_POST['last_name'];
-		$email = $_POST['email'];
-		$username = $_POST['username'];
-		$password = sha1($_POST['password']);
-		
-		$checkUser = userExist($username, $email);
-		
-		if($checkUser == false){	
-			$sql = "INSERT INTO users (name, last_name, email, username, password) VALUES(:firstName, :lastName, :email, :username, :password)";
-		    $namedParameters = array();
-		    $namedParameters[":firstName"]= $firstName;
-			$namedParameters[":lastName"] = $lastName;
-			$namedParameters[":email"] = $email;
-			$namedParameters[":username"] = $username;
-			$namedParameters[":password"] = $password;
-		    $stmt = $dbConn->prepare($sql);
-		    $stmt->execute($namedParameters);   
-	        echo "success";
-		}
+	if(!empty($_POST['name'])
+		&& preg_match('/([a-zA-Z0-9_-]+)/s', $_POST['name'])
+		&& !empty($_POST['last_name']) 
+		&& preg_match('/([a-zA-Z0-9_-]+)/s', $_POST['last_name'])
+		&& !empty($_POST['username']) 
+		&& preg_match('/([a-zA-Z0-9]+)/s', $_POST['username'])
+		&& !empty($_POST['password']) 
+		&& !empty($_POST['email'])
+		&& preg_match('/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6}\b/i', $_POST['email'])) {
+			$firstName = $_POST['name'];
+			$lastName = $_POST['last_name'];
+			$email = $_POST['email'];
+			$username = $_POST['username'];
+			$password = sha1($_POST['password']);
+			$checkUser = userExist($username, $email);
+			if($checkUser == false){	
+				$sql = "INSERT INTO users (name, last_name, email, username, password) VALUES(:firstName, :lastName, :email, :username, :password)";
+				$namedParameters = array();
+				$namedParameters[":firstName"]= $firstName;
+				$namedParameters[":lastName"] = $lastName;
+				$namedParameters[":email"] = $email;
+				$namedParameters[":username"] = $username;
+				$namedParameters[":password"] = $password;
+				$stmt = $dbConn->prepare($sql);
+				$stmt->execute($namedParameters);   
+				echo "success";
+			}
 		else {
 			echo "exists";
 		}
