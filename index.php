@@ -125,6 +125,22 @@
     <td>JSON Parsing</td>
     <td></td>
   </tr>
+     <tr class="working">
+    <td>Single Photo Information</td>
+    <td></td>
+  </tr>
+     <tr class="working">
+    <td>Photo Groups - Stories</td>
+    <td></td>
+  </tr>
+     <tr class="working">
+    <td>Photo Comments</td>
+    <td></td>
+  </tr>
+     <tr class="working">
+    <td>Photo Ratings, show average rating</td>
+    <td></td>
+  </tr>
       <tr class="working">
     <td>API Endpoints Documentation</td>
     <td></td>
