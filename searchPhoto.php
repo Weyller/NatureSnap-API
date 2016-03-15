@@ -4,7 +4,7 @@
 	$dbConn = getConnection();	
 	
 	if($_GET['search']){
-		$sql = "SELECT * FROM photos INNER JOIN users ON users.user_id = photos.user_id  WHERE image_title LIKE :search";
+		$sql = "SELECT * FROM photos INNER JOIN users ON users.user_id = photos.user_id  WHERE (image_title LIKE :search) OR (description LIKE :search)";
 	    $namedParameters = array();
 	    $namedParameters[":search"] = "%".$_GET['search']."%";
 	    $stmt = $dbConn -> prepare($sql);
