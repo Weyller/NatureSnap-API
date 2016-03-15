@@ -137,6 +137,10 @@
     <td>Photo Comments</td>
     <td></td>
   </tr>
+    <tr class="working">
+    <td>Views Counter</td>
+    <td></td>
+  </tr>
      <tr class="working">
     <td>Photo Ratings, show average rating</td>
     <td></td>
