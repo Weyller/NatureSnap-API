@@ -1,7 +1,7 @@
 <?php
-		session_start();
-		require '../db.php';
-		$dbConn = getConnection();
+	session_start();
+	require '../db.php';
+	$dbConn = getConnection();
         if(!empty($_POST['username']) && !empty(SHA1($_POST['password']))){
             $sql = "SELECT * FROM users WHERE username=:username AND password=:password";
             $namedParameters = array();
@@ -11,7 +11,6 @@
             $stmt -> execute($namedParameters);
             $result = $stmt->fetch();
         }
-		
 	if(empty($result)) {
 		echo "error";	
 	}
