@@ -27,13 +27,16 @@
 				chmod($target_dir."/".$_SESSION['username'], 0777);
 				umask($old);
 				
+                //Handle empty spaces
+                $photo = str_replace(' ', '', $_FILES['filename']['name']);
+                    
 				//Check if file in user folder already exists
-				if(file_exists( $target_dir."/". $_SESSION['username'] . "/" . basename($_FILES['filename']['name'] ))){
+				if(file_exists( $target_dir."/". $_SESSION['username'] . "/" . basename($photo ))){
 					echo "exists";
 				}
 				else {
 					//Move file into the user folder
-					$filename = $target_dir."/". $_SESSION['username'] . "/" .basename($_FILES['filename']['name']);
+					$filename = $target_dir."/". $_SESSION['username'] . "/" .basename($photo);
 					move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
 					
 					//Insert entry into database
