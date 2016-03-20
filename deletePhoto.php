@@ -20,7 +20,9 @@
 	if($result['username'] == $username){	
 		//Unlink old photo before inserting new photo
 		$oldFile = "".$result['image_title']."";
-		unlink($oldFile);
+        if (file_exists($oldFile)) { 
+            unlink($oldFile);
+        }
 			
 		//Delete entry from database
 		$sql = "DELETE FROM photos WHERE photo_id=:photo_id AND user_id=:user_id";
