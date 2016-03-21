@@ -1,33 +1,30 @@
 <?php
-	header('Content-type: application/json');
-	require '../db.php';
-	$dbConn = getConnection();	
-	$limit = $_GET['limit'];
-	if($_GET['limit']){
-		$sql = "SELECT * FROM photos INNER JOIN users ON users.user_id = photos.user_id  LIMIT ".$limit;
-	    $stmt = $dbConn -> prepare($sql);
-	    $stmt -> execute();
-	    $result = $stmt->fetchAll(); 
+header('Content-type: application/json');
+require '../db.php';
+$dbConn = getConnection();	
 
-		//Declaray PHP array
-		$data = [];
-		foreach($result as $photos){
-			//SQL array to PHP array
-			$data[] = [
-				'photo_id'=>$photos['photo_id'],
-				'name'=>$photos['name'],
-				'image_name'=>$photos['image_title'],
-				'description'=>$photos['description']
-			];
-		}
-		//PHP array to JSON array
-		echo json_encode(array(
-			 'success' => true,
-			 'data' => $data 
-		));
-	}
-	else {
-		echo json_encode(array(
-			 'success' => false
-		));
-	}
+//Pagination
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = isset($_GET['limit']) && $_GET['limit'] < 20 ? (int)$_GET['limit'] : 5;
+$start = ($page > 1) ? ($page * $limit) - $limit : 0;
+
+$sql = "SELECT * FROM photos INNER JOIN users ON users.user_id = photos.user_id  LIMIT {$start}, {$limit}";
+$stmt = $dbConn -> prepare($sql);
+$stmt -> execute();
+$result = $stmt->fetchAll(); 
+
+//Declaray PHP array
+$data = [];
+foreach($result as $photos){
+//Add data to PHP array
+$data[] = [
+    'photo_id'=>$photos['photo_id'],
+    'name'=>$photos['name'],
+    'image_name'=>$photos['image_title'],
+    'description'=>$photos['description']
+];
+}
+//PHP array to JSON array
+echo json_encode(array(
+ 'data' => $data 
+));
