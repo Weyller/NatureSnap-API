@@ -16,12 +16,18 @@
 			$username = $_POST['username'];
 			$password = sha1($_POST['password']);
 			$checkUser = userExist($username, $email);
-			if($checkUser == false){	
-				$sql = "INSERT INTO users (name, last_name, email, username, password) VALUES(:firstName, :lastName, :email, :username, :password)";
+			if($checkUser == false){
+                		$ip = "";
+		                if(!empty($_SERVER['REMOTE_ADDR'])){
+		                    //$ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+		                    $ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
+		                }
+				$sql = "INSERT INTO users (name, last_name, email, ip_address, username, password) VALUES(:firstName, :lastName, :email, :ip_address, :username, :password)";
 				$namedParameters = array();
 				$namedParameters[":firstName"]= $firstName;
 				$namedParameters[":lastName"] = $lastName;
 				$namedParameters[":email"] = $email;
+				$namedParameters[":ip_address"] = $ip;
 				$namedParameters[":username"] = $username;
 				$namedParameters[":password"] = $password;
 				$stmt = $dbConn->prepare($sql);
