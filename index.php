@@ -129,10 +129,23 @@
     <td>Single Photo Information</td>
     <td></td>
   </tr>
+  </tr>
+     <tr class="working">
+    <td>Get all photos in group</td>
+    <td></td>
+  </tr>
      <tr class="working">
     <td>Photo Groups - Stories</td>
     <td></td>
   </tr>
+<tr class="working">
+	<td>Delete Photo Groups & Database entries</td>
+	<td></td>
+</tr>
+<tr class="working">
+	<td>Update Group Name</td>
+	<td></td>
+</tr>
      <tr class="working">
     <td>Photo Comments</td>
     <td></td>
@@ -149,6 +162,10 @@
     <td>API Endpoints Documentation</td>
     <td></td>
   </tr>
+<tr class="done">
+	<td>Pagination</td>
+	<td>done</td>
+</tr>
 </table>
 <br>
 
