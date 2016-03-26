@@ -152,6 +152,10 @@
     <td>Single Photo Information</td>
     <td>done</td>
   </tr>
+<tr class="done">
+	<td>All Photos in Group</td>
+	<td>done</td>
+</tr>
      <tr class="done">
     <td>Create Photo Groups - Stories</td>
     <td>Done</td>
