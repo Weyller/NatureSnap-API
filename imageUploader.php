@@ -41,10 +41,12 @@ if(isset($_POST['uploadForm']) && !empty($_SESSION['username']) || preg_match('/
                 if(!empty($_POST['groupName'])){
                     $group = $_POST['groupName'];
                     $filename = $target_dir."/".$_SESSION['username']."/".$_POST['groupName']."/".basename($photo);  
+                    $group_dir = $target_dir."/".$_SESSION['username']."/".$_POST['groupName'];
                     //Check if group exists, also check if photo in group exists
                     $checkPhotoGroup = photoGroupExist($username, $photo, $group);
                     $checkGroup = groupExist($username, $group);
-                    if($checkPhotoGroup != true && $checkGroup != false){
+                    if($checkPhotoGroup != true && $checkGroup != false && file_exists($group_dir)){
+                        move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
                         addGroupPhoto($user_id, $filename, $description, $checkGroup );
                     } else {
                         echo "error";
@@ -137,7 +139,6 @@ function addPhoto($user_id, $filename, $description){
 //Add photo to group
 function addGroupPhoto($user_id, $filename, $description, $groupId){
     global $dbConn;
-    move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
     //Verify that the file was uploaded
     if (file_exists($filename)) {  
         $sql = "INSERT INTO photos (image_title, user_id, group_id, description) VALUES(:image_title, :user_id,:group_id,:description)";
