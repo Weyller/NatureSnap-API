@@ -1,11 +1,13 @@
 <?php
-	session_start();
+    session_start();
 	include 'functions.php';
 	echo "max_input_time: ".ini_get('max_input_time');
 	echo"<br>";
 		echo "post_max_size: ".ini_get('post_max_size');
 	echo"<br>";
 		echo "upload_max_filesize: ".ini_get('upload_max_filesize');
+
+
 
 	
 ?>
@@ -49,11 +51,12 @@
 </div>
       
       <?php if(!empty($_SESSION['username'])){?><h3 class="logged">Current logged in user: <?=$_SESSION['username']?></h3><?php }?>
-
+<div class="uploader">
       <div class="form">
           <h3>Upload Image</h3>
       <form method="post" enctype="multipart/form-data" action="imageUploader.php">
           <input type="file" name="filename" />
+          <br>Group Name: <br><input type="text" name="groupName" /><br>
           <br>Description: <br><input type="text" name="description" /><br>
           <input type="submit" value="Upload" name="uploadForm" />
       </form>
@@ -76,6 +79,26 @@
           <br><input type="submit" value="Delete" name="deleteForm" />
       </form>
 </div>
+</div>
+<br>
+<div class="uploader">
+      <div class="form">
+          <h3>Create Group</h3>
+      <form method="post" action="group.php">
+          Group Name: <br><input type="text" name="groupName" />
+          <br><input type="submit" value="Create" name="addGroup" />
+      </form>
+</div>
+<div class="uploader">
+  <div class="form">
+      <h3>Delete Group</h3>
+  <form method="post" action="group.php">
+      Group Name: <br><input type="text" name="groupName" />
+      <br><input type="submit" value="Delete" name="deleteGroup" />
+  </form>
+</div>
+</div>
+<br>
 <div class="items">
 <?=getUserImages()?>
 </div>
@@ -129,23 +152,18 @@
     <td>Single Photo Information</td>
     <td></td>
   </tr>
+     <tr class="done">
+    <td>Create Photo Groups - Stories</td>
+    <td>Done</td>
   </tr>
-     <tr class="working">
-    <td>Get all photos in group</td>
+ <tr class="working">
+    <td>Delete Photo Groups & Database entries</td>
     <td></td>
   </tr>
      <tr class="working">
-    <td>Photo Groups - Stories</td>
+    <td>Update Photo Groups</td>
     <td></td>
   </tr>
-<tr class="working">
-	<td>Delete Photo Groups & Database entries</td>
-	<td></td>
-</tr>
-<tr class="working">
-	<td>Update Group Name</td>
-	<td></td>
-</tr>
      <tr class="working">
     <td>Photo Comments</td>
     <td></td>
@@ -158,14 +176,14 @@
     <td>Photo Ratings, show average rating</td>
     <td></td>
   </tr>
+ <tr class="done">
+    <td>Pagination</td>
+    <td>Done</td>
+  </tr>
       <tr class="working">
     <td>API Endpoints Documentation</td>
     <td></td>
   </tr>
-<tr class="done">
-	<td>Pagination</td>
-	<td>done</td>
-</tr>
 </table>
 <br>
 
