@@ -66,6 +66,7 @@ elseif(isset($_POST['deleteGroup']) && !empty($_SESSION['user_id']) && preg_matc
                 echo "invalid";
             } else {
                 deleteFolder($target_dir."/".$username.'/'.$group);
+                deleteGroupPhotos($group, $user_id);
                 $sql = "DELETE FROM groups WHERE group_name=:group_name AND user_id=:user_id";
                 $namedParameters = array();
                 $namedParameters[":group_name"] = $group;
@@ -97,6 +98,25 @@ function groupExist ($user_id, $group_name){
     } else {
         return false;
     }		
+}
+//Delete all photos from group
+function deleteGroupPhotos($group, $user_id){
+    global $dbConn;
+    $sql = "SELECT group_id FROM groups WHERE group_name=:group_name AND user_id=:user_id";
+    $namedParameters = array();
+    $namedParameters[":user_id"] = $user_id;
+    $namedParameters[":group_name"] = $group;
+    $stmt = $dbConn -> prepare($sql);
+    $stmt -> execute($namedParameters);
+    $result = $stmt->fetch(); 
+    $group_id = $result['group_id'];
+    
+    $sql = "DELETE FROM photos WHERE group_id=:group_id AND user_id=:user_id";
+    $namedParameters = array();
+    $namedParameters[":group_id"] = $group_id;
+    $namedParameters[":user_id"] = $user_id;
+    $stmt = $dbConn -> prepare($sql);
+    $stmt -> execute($namedParameters);    
 }
 //Delete group folder and all files
 function deleteFolder($dir){
