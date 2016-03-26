@@ -262,6 +262,20 @@
     <td>POST</td>
     <td></td>
   </tr>
+<tr class="done">
+	<td>Create Group</td>
+	<td>/group.php</td>
+	<td>addGroup, username, user_id, groupName</td>
+	<td>POST</td>
+	<td></td>
+</tr>
+<tr class="done">
+	<td>Delete Group</td>
+	<td>/group.php</td>
+	<td>deleteGroup, username, user_id, groupName</td>
+	<td>POST</td>
+	<td></td>
+</tr>
 </table>
 <br>
 
