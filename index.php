@@ -148,17 +148,17 @@
     <td>JSON Parsing</td>
     <td></td>
   </tr>
-     <tr class="working">
+     <tr class="done">
     <td>Single Photo Information</td>
-    <td></td>
+    <td>done</td>
   </tr>
      <tr class="done">
     <td>Create Photo Groups - Stories</td>
     <td>Done</td>
   </tr>
- <tr class="working">
+ <tr class="done">
     <td>Delete Photo Groups & Database entries</td>
-    <td></td>
+    <td>Done</td>
   </tr>
      <tr class="working">
     <td>Update Photo Groups</td>
@@ -209,6 +209,20 @@
     <td>GET</td>
     <td>JSON</td>
   </tr>
+<tr class="done">
+	<td>Photo</td>
+	<td>/photo.php</td>
+	<td>photo_id</td>
+	<td>GET</td>
+	<td>JSON</td>
+</tr>
+<tr class="done">
+	<td>Group Photos</td>
+	<td>/photo.php</td>
+	<td>group_id</td>
+	<td>GET</td>
+	<td>JSON</td>
+</tr>
     <tr class="done">
   	<td>Login</td>
     <td>http://52.90.35.254/login.php</td>
