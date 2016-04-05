@@ -209,8 +209,7 @@
     <tr class="done">
   	<td>Latest Photos</td>
     <td>/latest.php</td>
-    <td>page</td>
-    <td>limit</td>
+    <td>page, limit</td>
     <td>GET</td>
     <td>JSON</td>
   </tr>
