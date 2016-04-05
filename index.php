@@ -201,14 +201,15 @@
   </tr>
   <tr class="done">
   	<td>Search</td>
-    <td>http://52.90.35.254/searchPhoto.php</td>
+    <td>/searchPhoto.php</td>
     <td>search</td>
     <td>GET</td>
     <td>JSON</td>
   </tr>
     <tr class="done">
   	<td>Latest Photos</td>
-    <td>http://52.90.35.254/latest.php</td>
+    <td>/latest.php</td>
+    <td>page</td>
     <td>limit</td>
     <td>GET</td>
     <td>JSON</td>
@@ -229,35 +230,35 @@
 </tr>
     <tr class="done">
   	<td>Login</td>
-    <td>http://52.90.35.254/login.php</td>
+    <td>/login.php</td>
     <td>username, password</td>
     <td>POST</td>
     <td></td>
   </tr>
   <tr class="done">
   	<td>Register</td>
-    <td>http://52.90.35.254/register.php</td>
+    <td>/register.php</td>
     <td>name, last_name, email, username, password</td>
     <td>POST</td>
     <td></td>
   </tr>
   <tr class="done">
   	<td>Image Upload</td>
-    <td>http://52.90.35.254/imageUploader.php</td>
+    <td>/imageUploader.php</td>
     <td>filename, description</td>
     <td>POST</td>
     <td></td>
   </tr>
     <tr class="done">
   	<td>Image Delete</td>
-    <td>http://52.90.35.254/deletePhoto.php</td>
+    <td>/deletePhoto.php</td>
     <td>photo_id, username, user_id</td>
     <td>POST</td>
     <td></td>
   </tr>
       <tr class="done">
   	<td>Image Update</td>
-    <td>http://52.90.35.254/updateImage.php</td>
+    <td>/updateImage.php</td>
     <td>photo_id, filename, username, user_id</td>
     <td>POST</td>
     <td></td>
