@@ -35,7 +35,7 @@ function getPhoto(){
             'data' => $data 
         ));
     } else {
-        echo "nothing";
+        echo json_encode(["data"=>[]]);
     }
 }
 
@@ -68,6 +68,6 @@ function getGroupPhotos(){
             'data' => $data 
         ));
     } else {
-        echo "nothing";
+        echo json_encode(["data"=>[]]);
     }
 } 
