@@ -11,16 +11,20 @@ CREATE TABLE users (
 );
 CREATE TABLE groups (
     group_id INT(11) NOT NULL AUTO_INCREMENT,
-    photo_id INT(11)  NOT NULL,
     group_name VARCHAR(100)  NOT NULL,
     user_id INT(11) NOT NULL,
     PRIMARY KEY (group_id)
+);
+CREATE TABLE group_photos (
+    gplink_id INT(11) NOT NULL AUTO_INCREMENT,
+    group_id INT(11) NOT NULL,
+    photo_id INT(11) NOT NULL,
+    PRIMARY KEY (gplink_id)
 );
 CREATE TABLE photos (
     photo_id INT(11) NOT NULL AUTO_INCREMENT,
     image_title TEXT NOT NULL,
     user_id INT(11) NOT NULL,
-    group_id INT(11) NOT NULL,
     description TEXT NOT NULL,
     location VARCHAR(250) NOT NULL,
     timestamp text NOT NULL,
