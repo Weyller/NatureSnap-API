@@ -89,12 +89,21 @@
           <br><input type="submit" value="Create" name="addGroup" />
       </form>
 </div>
-<div class="uploader">
   <div class="form">
       <h3>Delete Group</h3>
   <form method="post" action="group.php">
-      Group Name: <br><input type="text" name="groupName" />
+      Group ID: <br><input type="text" name="groupId" />
       <br><input type="submit" value="Delete" name="deleteGroup" />
+  </form>
+</div>
+
+
+  <div class="form">
+      <h3>Update/Edit Group</h3>
+  <form method="post" action="group.php">
+      Old Group Name <br><input type="text" name="oldGroup" />
+      <br>Old New Name <br><input type="text" name="newGroup" />
+      <br><input type="submit" value="Edit" name="editGroup" />
   </form>
 </div>
 </div>
@@ -169,7 +178,7 @@
     <td></td>
   </tr>
      <tr class="working">
-    <td>Photo Comments</td>
+    <td>Photo Comments - Add, Edit, Delete, Display</td>
     <td></td>
   </tr>
     <tr class="working">
@@ -177,7 +186,11 @@
     <td></td>
   </tr>
      <tr class="working">
-    <td>Photo Ratings, show average rating</td>
+    <td>Photo Ratings - Add, Edit, Delete, Display</td>
+    <td></td>
+  </tr>
+<tr class="working">
+    <td>Private Photos</td>
     <td></td>
   </tr>
  <tr class="done">
