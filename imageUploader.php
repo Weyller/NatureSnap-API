@@ -3,8 +3,7 @@ require '../db.php';
 session_start();
 $dbConn = getConnection();	
 
-if(isset($_POST['uploadForm']) && !empty($_SESSION['username']) || preg_match('/([a-zA-Z0-9_-]+)/s', !empty($_POST['groupName'])) ) {
-    $username = $_SESSION['username'];
+if(isset($_POST['uploadForm']) && !empty($_SESSION['user_id']) || preg_match('/([a-zA-Z0-9_-]+)/s', !empty($_POST['groupName'])) ) {
     $user_id = $_SESSION['user_id'];
     $description = $_POST['description'];
         
@@ -18,44 +17,53 @@ if(isset($_POST['uploadForm']) && !empty($_SESSION['username']) || preg_match('/
             $target_dir = "uploads";
 
             //Create directory for each user
-            if (!file_exists($target_dir."/".$_SESSION['username'])) { 
-                mkdir($target_dir."/".$_SESSION['username'], 0777, true); 
+            if (!file_exists($target_dir."/".$_SESSION['user_id'])) { 
+                mkdir($target_dir."/".$_SESSION['user_id'], 0777, true); 
              }
             
             //Set 777 permisions to each user folder to allow deleting and updating folder and files
             $old = umask(0);
-            chmod($target_dir."/".$_SESSION['username'], 0777);
+            chmod($target_dir."/".$_SESSION['user_id'], 0777);
             umask($old);
 
             //Handle empty spaces
             $photo = str_replace(' ', '', $_FILES['filename']['name']);
             
+           if(!empty($_POST['groupName'])){
+                $group = $_POST['groupName'];
+                $group_id = getGroupId($group, $user_id);
+           }
+                               
             //Check if file exist in user folder or in user group folder
-            if(!empty($_POST['groupName']) && file_exists($target_dir."/".$_SESSION['username']."/".$_POST['groupName']."/".basename($photo ))){
+            if(!empty($_POST['groupName']) && $group_id != false && file_exists($target_dir."/".$_SESSION['user_id']."/".$group_id."/".basename($photo ))){
                 echo "exists";
-            } elseif(empty($_POST['groupName']) && file_exists($target_dir."/".$_SESSION['username']."/".basename($photo ))){
+            } elseif(empty($_POST['groupName']) && file_exists($target_dir."/".$_SESSION['user_id']."/".basename($photo ))){
                 echo "exists";
             }   
             //If file does not exists, then move file into the user folder or group folder
             else {                
-                if(!empty($_POST['groupName'])){
-                    $group = $_POST['groupName'];
-                    $filename = $target_dir."/".$_SESSION['username']."/".$_POST['groupName']."/".basename($photo);  
-                    $group_dir = $target_dir."/".$_SESSION['username']."/".$_POST['groupName'];
+                if($group_id !=false){
+                    //Initialize group and file paths
+                    $filename = $target_dir."/".$_SESSION['user_id']."/".$group_id."/".$photo;  
+                    $group_dir = $target_dir."/".$_SESSION['user_id']."/".$group_id;
+
                     //Check if group exists, also check if photo in group exists
-                    $checkPhotoGroup = photoGroupExist($username, $photo, $group);
-                    $checkGroup = groupExist($username, $group);
+                    $checkPhotoGroup = photoGroupExist($user_id, $photo, $group);
+                    $checkGroup = groupExist($user_id, $group);
                     if($checkPhotoGroup != true && $checkGroup != false && file_exists($group_dir)){
                         move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
                         addGroupPhoto($user_id, $filename, $description, $checkGroup );
                     } else {
                         echo "error";
                     }
+                } else {
+                    echo "error";
                 }
+                
                 //If no group is included, then check for regular photo only
-                else {
-                    $filename = $target_dir."/". $_SESSION['username'] . "/" .basename($photo);
-                    $checkPhoto = photoExist($username, $photo);
+                if($group_id ==false){
+                    $filename = $target_dir."/". $_SESSION['user_id'] . "/" .basename($photo);
+                    $checkPhoto = photoExist($user_id, $photo);
                     if($checkPhoto == false){
                         addPhoto($user_id, $filename, $description);
                     } else {
@@ -71,49 +79,49 @@ if(isset($_POST['uploadForm']) && !empty($_SESSION['username']) || preg_match('/
     echo "invalid";
 }
 //Check if entry for photo  already exists
-function photoExist ($username, $photo){
+function photoExist ($user_id, $photo){
     global $dbConn;
-    $sql = "SELECT * FROM users INNER JOIN photos ON users.user_id = photos.user_id WHERE username=:username AND image_title=:image_title";
+    $sql = "SELECT * FROM users INNER JOIN photos ON users.user_id = photos.user_id WHERE users.user_id=:user_id AND image_title=:image_title";
     $namedParameters = array();
-    $namedParameters[":username"] = $username;
+    $namedParameters[":user_id"] = $user_id;
     $namedParameters[":image_title"] = $photo;
     $stmt = $dbConn -> prepare($sql);
     $stmt -> execute($namedParameters);
     $result = $stmt->fetch();
-    if($username == $result['username'] && $photo == $result['image_title']){
+    if($user_id == $result['user_id'] && $photo == $result['image_title']){
         return true;
     } else {
         return false;
     }		
 }
 //Check if entry for group already exists
-function groupExist ($username, $group){
+function groupExist ($user_id, $group){
     global $dbConn;
-    $sql = "SELECT * FROM users INNER JOIN groups ON users.user_id = groups.user_id WHERE username=:username AND group_name=:groupName";
+    $sql = "SELECT * FROM users INNER JOIN groups ON users.user_id = groups.user_id WHERE users.user_id=:user_id AND group_name=:groupName";
     $namedParameters = array();
-    $namedParameters[":username"] = $username;
+    $namedParameters[":user_id"] = $user_id;
     $namedParameters[":groupName"] = $group;
     $stmt = $dbConn -> prepare($sql);
     $stmt -> execute($namedParameters);
     $result = $stmt->fetch();
-    if($username == $result['username'] && $group == $result['group_name']){
+    if($user_id == $result['user_id'] && $group == $result['group_name']){
         return (int)$result['group_id'];
     } else {
         return false;
     }	
 }
 //Check if entry for photo in group already exists
-function photoGroupExist ($username, $photo, $group){
+function photoGroupExist ($user_id, $photo, $group){
     global $dbConn;
-    $sql = "SELECT * FROM users INNER JOIN photos ON users.user_id = photos.user_id INNER JOIN groups ON users.user_id = groups.user_id WHERE username=:username AND image_title=:image_title AND group_name=:groupName";
+    $sql = "SELECT * FROM users INNER JOIN photos ON users.user_id = photos.user_id INNER JOIN groups ON users.user_id = groups.user_id WHERE users.user_id=:user_id AND image_title=:image_title AND group_name=:groupName";
     $namedParameters = array();
-    $namedParameters[":username"] = $username;
+    $namedParameters[":user_id"] = $user_id;
     $namedParameters[":image_title"] = $photo;
     $namedParameters[":groupName"] = $group;
     $stmt = $dbConn -> prepare($sql);
     $stmt -> execute($namedParameters);
     $result = $stmt->fetch();
-    if($username == $result['username'] && $photo == $result['image_title'] && $group == $result['group_name']){
+    if($user_id == $result['user_id'] && $photo == $result['image_title'] && $group == $result['group_name']){
         return true;
     } else {
         return false;
@@ -153,4 +161,22 @@ function addGroupPhoto($user_id, $filename, $description, $groupId){
     } else {
         echo "error";
     }
+}
+//Get group_id if it exist
+function getGroupId($group, $user_id){
+    global $dbConn;
+    $sql = "SELECT * FROM users INNER JOIN groups ON users.user_id = groups.user_id WHERE users.user_id=:user_id AND group_name=:group_name";
+    $namedParameters = array();
+    $namedParameters[':group_name'] = $group;
+    $namedParameters[':user_id'] = $user_id;
+    $stmt = $dbConn -> prepare($sql);
+    $stmt -> execute($namedParameters);
+    $result = $stmt->fetch();
+    if($group = $result['group_name'] && $user_id = $result['user_id']){
+        return $result['group_id'];
+    }
+    else {
+        return false;
+    }
+
 }
