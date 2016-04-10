@@ -50,6 +50,10 @@
 			echo "<strong>Image Path:</strong> ".$photos['image_title'];
 			echo "<br>";
 			echo "<strong>image Id:</strong> ".$photos['photo_id'];
+            echo "<br>";
+            if(!empty($photos['group_name'])){
+               echo "<strong>Goup Name:</strong> ".$photos['group_name']; 
+            }
 			if(!empty($photos['description'])){
 				echo "<br>";
 				echo "<strong>Description:</strong> ".$photos['description'];
