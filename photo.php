@@ -5,6 +5,7 @@ $dbConn = getConnection();
 
 if(!empty($_GET['photo_id']) && (int)$_GET['photo_id']){
     getPhoto();
+    views($_GET['photo_id']);
 } elseif(!empty($_GET['group_id']) && (int)$_GET['group_id']){
     getGroupPhotos();
 } else {
@@ -28,7 +29,8 @@ function getPhoto(){
             'photo_id'=>$result['photo_id'],
             'name'=>$result['name'],
             'image_name'=>$result['image_title'],
-            'description'=>$result['description']
+            'description'=>$result['description'],
+            'views'=>$result['views']
         ];
         //PHP array to JSON array
         echo json_encode(array(
@@ -60,7 +62,8 @@ function getGroupPhotos(){
                 'group_name'=>$photos['group_name'],
                 'group_id'=>$photos['group_id'],
                 'image_name'=>$photos['image_title'],
-                'description'=>$photos['description']
+                'description'=>$photos['description'],
+                'views'=>$photos['views']
             ];
         }
         //PHP array to JSON array
@@ -71,3 +74,23 @@ function getGroupPhotos(){
         echo json_encode(["data"=>[]]);
     }
 } 
+//Increase views counter every time a GET request for a photo is sent
+function views($photo_id){
+    global $dbConn;
+    //Get Number of views of photo
+    $sql = "SELECT * FROM photos WHERE photo_id=:photo_id";    
+    $namedParameters = array();
+    $namedParameters[':photo_id'] = $photo_id;
+    $stmt = $dbConn->prepare($sql);
+    $stmt->execute($namedParameters); 
+    $result = $stmt->fetch();
+    $views = $result['views'];
+    
+    //Increment views counter
+    $sql = "UPDATE photos SET views=:views WHERE photo_id=:photo_id";
+    $namedParameters = array();
+    $namedParameters[':views'] = $views + 1;
+    $namedParameters[':photo_id'] = $photo_id;
+    $stmt = $dbConn->prepare($sql);
+    $stmt->execute($namedParameters); 
+}
