@@ -28,6 +28,7 @@ CREATE TABLE photos (
     description TEXT NOT NULL,
     location VARCHAR(250) NOT NULL,
     timestamp text NOT NULL,
+    views INT(11),
     PRIMARY KEY (photo_id)
 );
 CREATE TABLE location (
@@ -53,10 +54,4 @@ CREATE TABLE comment (
     comment INT(11) NOT NULL,
     timestamp TEXT NOT NULL,
     PRIMARY KEY (comment_id)
-);
-CREATE TABLE views (
-    photo_id INT(11) NOT NULL,
-    user_id INT(11) NOT NULL,
-    num_of_views INT(11) NOT NULL,
-    PRIMARY KEY (photo_id)
 );
