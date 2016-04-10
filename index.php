@@ -92,7 +92,7 @@
   <div class="form">
       <h3>Delete Group</h3>
   <form method="post" action="group.php">
-      Group ID: <br><input type="text" name="groupId" />
+      Group Name: <br><input type="text" name="groupName" />
       <br><input type="submit" value="Delete" name="deleteGroup" />
   </form>
 </div>
