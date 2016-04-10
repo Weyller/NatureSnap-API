@@ -181,7 +181,7 @@
     <td>Photo Comments - Add, Edit, Delete, Display</td>
     <td></td>
   </tr>
-    <tr class="working">
+    <tr class="done">
     <td>Views Counter</td>
     <td></td>
   </tr>
