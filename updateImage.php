@@ -1,13 +1,12 @@
 <?php
     require '../db.php';
     session_start();
-    $username = $_SESSION['username'];
 	$user_id = $_SESSION['user_id'];
 	
 	$description = $_POST['description'];
     $dbConn = getConnection();	
 	
-	if(isset($_POST['updateForm']) && !empty($_POST['photo_id']) && !empty($_SESSION['username'])) {
+	if(isset($_POST['updateForm']) && !empty($_POST['photo_id']) && !empty($_SESSION['user_id'])) {
 		
 		if($_FILES['filename']['tmp_name']){
 	        $imageType = exif_imagetype($_FILES['filename']['tmp_name'] ); //Returns 1 if gif, 2 if jpg, 3 if png
@@ -18,7 +17,7 @@
 			
 		if($_FILES['filename']['tmp_name'] || !empty($_POST['description'])){
 			//Retrieve image title using the photo_id parameter
-			$sql = "SELECT image_title, username FROM photos INNER JOIN users ON users.user_id = photos.user_id WHERE photo_id=:photo_id AND users.user_id=:user_id";
+			$sql = "SELECT image_title, users.user_id FROM photos INNER JOIN users ON users.user_id = photos.user_id WHERE photo_id=:photo_id AND users.user_id=:user_id";
 		    $namedParameters = array();
 			$namedParameters[':photo_id'] = $_POST['photo_id'];
 			$namedParameters[':user_id'] = $user_id;
@@ -27,17 +26,19 @@
 			$result = $stmt->fetch(); 
 			
 			//Prevent one user from updating other user's photos
-			if($result['username'] == $username){
+			if($result['user_id'] == $user_id){
 				if($_FILES['filename']['tmp_name']){
 					//Unlink old photo before inserting new photo
 					$oldFile = "".$result['image_title']."";
-					unlink($oldFile);
+                    if(file_exists($oldFile)){
+					   unlink($oldFile);
+                    }
 	
 					//Uploads Directory, user folders will be created here for every user when they upload their first image
 				    $target_dir = "uploads";
 	
 					//Move file into the user folder
-					$filename = $target_dir."/". $_SESSION['username'] . "/" .basename($_FILES['filename']['name']);
+					$filename = $target_dir."/". $_SESSION['user_id'] . "/" .basename($_FILES['filename']['name']);
 					move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
 				}
 				//Insert entry into database
