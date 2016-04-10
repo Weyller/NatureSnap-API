@@ -30,8 +30,11 @@ if(isset($_POST['addGroup']) && !empty($_SESSION['user_id']) && preg_match('/([a
         $namedParameters[":user_id"] = $user_id;
         $stmt = $dbConn -> prepare($sql);
         $stmt -> execute($namedParameters);
-        echo "success:".$dbConn->lastInsertId();        
-        
+        if ($stmt->rowCount()){
+            echo "success";  
+        } else {
+            echo "error";
+        }
         //Use $dbConn->lastInsertId() to get last inserted id,
         //use that id to create the group folder
         $last = $dbConn->lastInsertId();
@@ -49,33 +52,24 @@ if(isset($_POST['addGroup']) && !empty($_SESSION['user_id']) && preg_match('/([a
     }
 } 
 //Delete group from database
-elseif(isset($_POST['deleteGroup']) && !empty($_SESSION['user_id']) && preg_match('/([a-zA-Z0-9_-]+)/s', $_POST['groupId']) ){
+elseif(isset($_POST['deleteGroup']) && !empty($_SESSION['user_id']) && preg_match('/([a-zA-Z0-9_-]+)/s', !empty($_POST['groupName']))){
     $user_id = $_SESSION['user_id'];
-    $group_id = $_POST['groupId'];
+    $groupName = $_POST['groupName'];
 
-    //Check if group entry exist in the database
-    $checkGroup = groupIdExist($user_id, $group_id);
+    //Get group id, if not group id is found, then return null
+    $group_id = getGroupId($user_id, $groupName);
 
-    if($checkGroup == true){
+    if($group_id != null){
         $target_dir = "uploads";
-
-        //Check if user folder exists
-        //If it exists, then delete files and database entries
         if (!file_exists($target_dir."/".$user_id)) {    
           echo "invalid"; 
         } else {    
             if(!file_exists($target_dir."/".$user_id.'/'.$group_id)){
                 echo "invalid";
             } else {
-                deleteFolder($target_dir."/".$user_id.'/'.$group_id);
-                deleteGroupPhotos($group_id, $user_id);
-                $sql = "DELETE FROM groups WHERE group_id=:group_id AND user_id=:user_id";
-                $namedParameters = array();
-                $namedParameters[":group_id"] = $group_id;
-                $namedParameters[":user_id"] = $user_id;
-                $stmt = $dbConn -> prepare($sql);
-                $stmt -> execute($namedParameters);
-                echo "success";
+                deleteGroupPhotos($target_dir, $group_id, $groupName, $user_id);
+                //deleteFolder($target_dir."/".$user_id.'/'.$group_id);
+        
             }
         }
     } else {
@@ -106,14 +100,56 @@ function groupExist ($user_id, $group_name){
     }		
 }
 //Delete all photos from group
-function deleteGroupPhotos($group_id, $user_id){
-    global $dbConn;    
-    $sql = "DELETE FROM photos WHERE group_id=:group_id AND user_id=:user_id";
-    $namedParameters = array();
-    $namedParameters[":group_id"] = $group_id;
-    $namedParameters[":user_id"] = $user_id;
-    $stmt = $dbConn -> prepare($sql);
-    $stmt -> execute($namedParameters);    
+function deleteGroupPhotos($target_dir, $group_id, $groupName, $user_id){
+    global $dbConn;   
+    
+    //We start our transaction.
+    $dbConn->beginTransaction();
+    
+    try {
+        $sql = "DELETE FROM groups WHERE group_name=:group_name AND user_id=:user_id";
+        $namedParameters = array();
+        $namedParameters[":group_name"] = $groupName;
+        $namedParameters[":user_id"] = $user_id;
+        $stmt = $dbConn -> prepare($sql);
+        $stmt -> execute($namedParameters);
+
+        //Retrieve all photos from group_photos, 
+        //then use them to delete photos from photos table
+        $sql = "SELECT * FROM group_photos INNER JOIN photos ON photos.photo_id = group_photos.photo_id WHERE user_id =:user_id AND group_id=:group_id";
+        $namedParameters = array();
+        $namedParameters[":user_id"] = $user_id;
+        $namedParameters[":group_id"] = $group_id;
+        $stmt = $dbConn -> prepare($sql);
+        $stmt -> execute($namedParameters);
+        $result = $stmt->fetchAll();
+
+        //Delete all photos that belong to a group in the photos table
+        foreach($result as $photos) {
+            $sql = "DELETE FROM photos WHERE photo_id=:photo_id";
+            $namedParameters = array();
+            $namedParameters[":photo_id"] = $photos['photo_id'];
+            $stmt = $dbConn -> prepare($sql);
+            $stmt -> execute($namedParameters);  
+        }
+        //Delete entries from group photos
+        $sql = "DELETE FROM group_photos WHERE group_id=:group_id";
+        $namedParameters = array();
+        $namedParameters[":group_id"] = $group_id;
+        $stmt = $dbConn -> prepare($sql);
+        $stmt -> execute($namedParameters);  
+        
+        //Commit changes
+        $dbConn->commit();
+        
+        //Finally, delete group folder and files
+        deleteFolder($target_dir."/".$user_id.'/'.$group_id);
+        
+        echo "success";
+    } catch(Exception $e){
+        echo "error";
+        $dbConn->rollBack();
+    }
 }
 //Check if group ID exists
 //If exists, then delete group folder, files and entries
@@ -160,6 +196,22 @@ function editGroup ($user_id, $old, $new){
         }
     } else {
         echo "error";
+    }
+}
+//Group ID
+function getGroupId($user_id, $groupName){
+    global $dbConn;
+    $sql = "SELECT * FROM groups WHERE user_id =:user_id AND group_name=:group_name";
+    $namedParameters = array();
+    $namedParameters[":user_id"] = $user_id;
+    $namedParameters[":group_name"] = $groupName;
+    $stmt = $dbConn -> prepare($sql);
+    $stmt -> execute($namedParameters);
+    $result = $stmt->fetch();  
+    if($user_id == $result['user_id'] && $groupName = $result['group_name']){
+        return (int)$result['group_id'];
+    } else {
+        return null;
     }
 }
 //Delete group folder and all files
