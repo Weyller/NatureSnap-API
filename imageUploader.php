@@ -6,7 +6,7 @@ $dbConn = getConnection();
 if(isset($_POST['uploadForm']) && !empty($_SESSION['user_id']) || preg_match('/([a-zA-Z0-9_-]+)/s', !empty($_POST['groupName'])) ) {
     $user_id = $_SESSION['user_id'];
     $description = $_POST['description'];
-        
+    
     if($_FILES['filename']['tmp_name']){
         $imageType = exif_imagetype($_FILES['filename']['tmp_name'] ); //Returns 1 if gif, 2 if jpg, 3 if png
         if($imageType !=1 && $imageType !=2 && $imageType !=3) {
@@ -28,6 +28,8 @@ if(isset($_POST['uploadForm']) && !empty($_SESSION['user_id']) || preg_match('/(
 
             //Handle empty spaces
             $photo = str_replace(' ', '', $_FILES['filename']['name']);
+            
+            $group_id = false;
             
            if(!empty($_POST['groupName'])){
                 $group = $_POST['groupName'];
@@ -56,8 +58,6 @@ if(isset($_POST['uploadForm']) && !empty($_SESSION['user_id']) || preg_match('/(
                     } else {
                         echo "error";
                     }
-                } else {
-                    echo "error";
                 }
                 
                 //If no group is included, then check for regular photo only
@@ -149,15 +149,29 @@ function addGroupPhoto($user_id, $filename, $description, $groupId){
     global $dbConn;
     //Verify that the file was uploaded
     if (file_exists($filename)) {  
-        $sql = "INSERT INTO photos (image_title, user_id, group_id, description) VALUES(:image_title, :user_id,:group_id,:description)";
+        $sql = "INSERT INTO photos (image_title, user_id, description) VALUES(:image_title, :user_id,:description)";
         $namedParameters = array();
         $namedParameters[':image_title'] = $filename;
         $namedParameters[':user_id'] = $user_id;
         $namedParameters[':description'] = $_POST['description'];
-        $namedParameters[':group_id'] =  $groupId;  
         $stmt = $dbConn->prepare($sql);
         $stmt->execute($namedParameters);  
-        echo "success:".$dbConn->lastInsertId();  
+        
+        //Check if previous execution affected the rows
+        //if so, then get lastInsertId() as the photo_id
+        //then insert that id into the photo_groups table
+        if ($stmt->rowCount()){
+            $photo_id = $dbConn->lastInsertId();
+            $sql = "INSERT INTO group_photos (group_id, photo_id) VALUES(:group_id,:photo_id)";
+            $namedParameters = array();
+            $namedParameters[':group_id'] =  $groupId;  
+            $namedParameters[':photo_id'] =  $photo_id;  
+            $stmt = $dbConn->prepare($sql);
+            $stmt->execute($namedParameters); 
+            echo "success";  
+        } else {
+            echo "error";
+        }
     } else {
         echo "error";
     }
@@ -174,9 +188,7 @@ function getGroupId($group, $user_id){
     $result = $stmt->fetch();
     if($group = $result['group_name'] && $user_id = $result['user_id']){
         return $result['group_id'];
-    }
-    else {
+    } else {
         return false;
     }
-
 }
