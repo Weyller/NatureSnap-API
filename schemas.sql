@@ -28,7 +28,7 @@ CREATE TABLE photos (
     description TEXT NOT NULL,
     location VARCHAR(250) NOT NULL,
     timestamp text NOT NULL,
-    views INT(11),
+    views INT(11) NOT NULL,
     PRIMARY KEY (photo_id)
 );
 CREATE TABLE location (
