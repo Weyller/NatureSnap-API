@@ -65,7 +65,12 @@ if(isset($_POST['uploadForm']) && !empty($_SESSION['user_id']) || preg_match('/(
                     $filename = $target_dir."/". $_SESSION['user_id'] . "/" .basename($photo);
                     $checkPhoto = photoExist($user_id, $photo);
                     if($checkPhoto == false){
-                        addPhoto($user_id, $filename, $description);
+                        //Make photos public or private
+                        $private = 0;
+                        if(isset($_POST['private'])){
+                           $private = 1; 
+                        }
+                        addPhoto($user_id, $filename, $description, $private);
                     } else {
                         echo "error";
                     }
@@ -128,15 +133,16 @@ function photoGroupExist ($user_id, $photo, $group){
     }	
 }
 //Add photo
-function addPhoto($user_id, $filename, $description){
+function addPhoto($user_id, $filename, $description, $private){
     global $dbConn;
     move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
     if (file_exists($filename)) {  
-        $sql = "INSERT INTO photos (image_title, user_id, description) VALUES(:image_title, :user_id,:description)";
+        $sql = "INSERT INTO photos (image_title, user_id, description, private) VALUES(:image_title, :user_id,:description,:private)";
         $namedParameters = array();
         $namedParameters[':image_title'] = $filename;
         $namedParameters[':user_id'] = $user_id;
         $namedParameters[':description'] = $description;
+        $namedParameters[':private'] = $private;
         $stmt = $dbConn->prepare($sql);
         $stmt->execute($namedParameters);  
         echo "success:".$dbConn->lastInsertId();  

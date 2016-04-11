@@ -58,6 +58,7 @@
           <input type="file" name="filename" />
           <br>Group Name: <br><input type="text" name="groupName" /><br>
           <br>Description: <br><input type="text" name="description" /><br>
+          Private: <input type="checkbox" name="private" /><br><br>
           <input type="submit" value="Upload" name="uploadForm" />
       </form>
 </div>
