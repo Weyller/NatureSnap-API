@@ -21,10 +21,12 @@ $data[] = [
     'photo_id'=>$photos['photo_id'],
     'name'=>$photos['name'],
     'image_name'=>$photos['image_title'],
-    'description'=>$photos['description']
+    'description'=>$photos['description'],
+    'private'=>$photos['private'],
+    'views'=>$photos['views']
 ];
 }
 //PHP array to JSON array
 echo json_encode(array(
  'data' => $data 
-));
+), JSON_NUMERIC_CHECK);

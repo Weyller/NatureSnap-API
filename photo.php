@@ -4,8 +4,8 @@ require '../db.php';
 $dbConn = getConnection();	
 
 if(!empty($_GET['photo_id']) && (int)$_GET['photo_id']){
-    getPhoto();
     views($_GET['photo_id']);
+    getPhoto();
 } elseif(!empty($_GET['group_id']) && (int)$_GET['group_id']){
     getGroupPhotos();
 } else {
@@ -30,12 +30,13 @@ function getPhoto(){
             'name'=>$result['name'],
             'image_name'=>$result['image_title'],
             'description'=>$result['description'],
+            'private'=>$result['private'],
             'views'=>$result['views']
         ];
         //PHP array to JSON array
         echo json_encode(array(
             'data' => $data 
-        ));
+        ), JSON_NUMERIC_CHECK);
     } else {
         echo json_encode(["data"=>[]]);
     }
@@ -44,7 +45,7 @@ function getPhoto(){
 //Get all photos from group
 function getGroupPhotos(){
     global $dbConn;
-    $sql = "SELECT * FROM photos INNER JOIN groups ON photos.user_id = groups.user_id INNER JOIN users ON users.user_id = groups.user_id WHERE photos.group_id=:group_id";
+    $sql = "SELECT * FROM photos INNER JOIN group_photos ON photos.photo_id = group_photos.photo_id INNER JOIN users ON users.user_id = photos.user_id INNER JOIN groups ON groups.group_id = group_photos.group_id WHERE group_photos.group_id =:group_id";
     $namedParameters = array();
     $namedParameters[":group_id"] = $_GET['group_id'];
     $stmt = $dbConn -> prepare($sql);
@@ -63,13 +64,14 @@ function getGroupPhotos(){
                 'group_id'=>$photos['group_id'],
                 'image_name'=>$photos['image_title'],
                 'description'=>$photos['description'],
+                'private'=>$photos['private'],
                 'views'=>$photos['views']
             ];
         }
         //PHP array to JSON array
         echo json_encode(array(
             'data' => $data 
-        ));
+        ), JSON_NUMERIC_CHECK);
     } else {
         echo json_encode(["data"=>[]]);
     }
