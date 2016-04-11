@@ -258,7 +258,7 @@
   <tr class="done">
   	<td>Image Upload</td>
     <td>/imageUploader.php</td>
-    <td>filename, description</td>
+    <td>filename, description,user_id</td>
     <td>POST</td>
     <td></td>
   </tr>
