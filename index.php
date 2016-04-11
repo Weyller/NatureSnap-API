@@ -264,28 +264,35 @@
     <tr class="done">
   	<td>Image Delete</td>
     <td>/deletePhoto.php</td>
-    <td>photo_id, username, user_id</td>
+    <td>photo_id, user_id</td>
     <td>POST</td>
     <td></td>
   </tr>
       <tr class="done">
   	<td>Image Update</td>
     <td>/updateImage.php</td>
-    <td>photo_id, filename, username, user_id</td>
+    <td>photo_id, filename, user_id</td>
     <td>POST</td>
     <td></td>
   </tr>
 <tr class="done">
 	<td>Create Group</td>
 	<td>/group.php</td>
-	<td>addGroup, username, user_id, groupName</td>
+	<td>addGroup, user_id, groupName</td>
 	<td>POST</td>
 	<td></td>
 </tr>
 <tr class="done">
 	<td>Delete Group</td>
 	<td>/group.php</td>
-	<td>deleteGroup, username, user_id, groupName</td>
+	<td>deleteGroup, user_id, groupName</td>
+	<td>POST</td>
+	<td></td>
+</tr>
+<tr class="done">
+	<td>Edit Group</td>
+	<td>/group.php</td>
+	<td>editGroup, user_id, oldGroup, newGroup</td>
 	<td>POST</td>
 	<td></td>
 </tr>
