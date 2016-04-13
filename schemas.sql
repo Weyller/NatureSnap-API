@@ -53,7 +53,7 @@ CREATE TABLE rating (
 CREATE TABLE comment (
     comment_id INT(11) NOT NULL AUTO_INCREMENT,
     photo_id INT(11) NOT NULL,
-    friend_id INT(11) NOT NULL,
+    commentor_id  INT(11) NOT NULL,
     comment INT(11) NOT NULL,
     timestamp TEXT NOT NULL,
     PRIMARY KEY (comment_id)
