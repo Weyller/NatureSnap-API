@@ -28,6 +28,8 @@ CREATE TABLE photos (
     description TEXT NOT NULL,
     location VARCHAR(250) NOT NULL,
     timestamp text NOT NULL,
+    lat FLOAT(10,6) NOT NULL,
+    lng FLOAT(10,6) NOT NULL,
     views INT(11) NOT NULL,
     private INT(11) NOT NULL,
     PRIMARY KEY (photo_id)
