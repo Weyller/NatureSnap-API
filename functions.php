@@ -36,7 +36,7 @@
 
 	function geAllImages(){
 		global $dbConn;
-	    $sql = "SELECT * FROM photos INNER JOIN users ON users.user_id = photos.user_id ORDER BY photo_id DESC";
+	    $sql = "SELECT * FROM photos INNER JOIN group_photos ON group_photos.photo_id = photos.photo_id INNER JOIN users ON users.user_id = photos.user_id INNER JOIN groups on groups.group_id = group_photos.group_id ORDER BY photos.photo_id DESC";
 	    $stmt = $dbConn->prepare($sql);
 	    $stmt->execute();
 	    $result = $stmt->fetchAll(); 

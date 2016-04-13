@@ -67,9 +67,7 @@ elseif(isset($_POST['deleteGroup']) && !empty($_SESSION['user_id']) && preg_matc
             if(!file_exists($target_dir."/".$user_id.'/'.$group_id)){
                 echo "invalid";
             } else {
-                deleteGroupPhotos($target_dir, $group_id, $groupName, $user_id);
-                //deleteFolder($target_dir."/".$user_id.'/'.$group_id);
-        
+                deleteGroupPhotos($target_dir, $group_id, $groupName, $user_id);        
             }
         }
     } else {
