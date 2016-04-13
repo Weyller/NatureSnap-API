@@ -56,6 +56,8 @@
           <h3>Upload Image</h3>
       <form method="post" enctype="multipart/form-data" action="imageUploader.php">
           <input type="file" name="filename" />
+          <br>Latitude: <br><input type="text" name="latitude" /><br>
+          <br>Longitude: <br><input type="text" name="longitude" /><br>
           <br>Group Name: <br><input type="text" name="groupName" /><br>
           <br>Description: <br><input type="text" name="description" /><br>
           Private: <input type="checkbox" name="private" /><br><br>
@@ -184,15 +186,15 @@
   </tr>
     <tr class="done">
     <td>Views Counter</td>
-    <td></td>
+    <td>Done</td>
   </tr>
      <tr class="working">
     <td>Photo Ratings - Add, Edit, Delete, Display</td>
     <td></td>
   </tr>
-<tr class="working">
+<tr class="done">
     <td>Private Photos</td>
-    <td></td>
+    <td>Done</td>
   </tr>
  <tr class="done">
     <td>Pagination</td>

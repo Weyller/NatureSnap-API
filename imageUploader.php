@@ -3,16 +3,25 @@ require '../db.php';
 session_start();
 $dbConn = getConnection();	
 
-if(isset($_POST['uploadForm']) && !empty($_SESSION['user_id']) || preg_match('/([a-zA-Z0-9_-]+)/s', !empty($_POST['groupName'])) ) {
+if(isset($_POST['uploadForm']) 
+   && !empty($_SESSION['user_id']) 
+   && preg_match('/^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}$/', $_POST['latitude'])
+   && preg_match('/^-?([1]?[1-7][1-9]|[1]?[1-8][0]|[1-9]?[0-9])\.{1}\d{1,6}$/', $_POST['longitude'])
+   || preg_match('/([a-zA-Z0-9_-]+)/s', $_POST['groupName'])
+   || preg_match('/([a-zA-Z0-9_-]+)/s', $_POST['description'])) {
+    
+    //Assign values to variables from inputs
     $user_id = $_SESSION['user_id'];
     $description = $_POST['description'];
+    $latitude = $_POST['latitude'];
+    $longitude = $_POST['longitude'];
     
+    //Check if the file input is set
     if($_FILES['filename']['tmp_name']){
         $imageType = exif_imagetype($_FILES['filename']['tmp_name'] ); //Returns 1 if gif, 2 if jpg, 3 if png
         if($imageType !=1 && $imageType !=2 && $imageType !=3) {
             unlink($_FILES['filename']['tmp_name']);//Delete files
-        }	
-        else {
+        } else {
             //Uploads Directory
             $target_dir = "uploads";
 
@@ -29,8 +38,11 @@ if(isset($_POST['uploadForm']) && !empty($_SESSION['user_id']) || preg_match('/(
             //Handle empty spaces
             $photo = str_replace(' ', '', $_FILES['filename']['name']);
             
+            //Default value for non-existing graoup
             $group_id = false;
             
+            //If groupName parameter was provided,
+            //then validate that group with the given parameters
            if(!empty($_POST['groupName'])){
                 $group = $_POST['groupName'];
                 $group_id = getGroupId($group, $user_id);
@@ -54,7 +66,7 @@ if(isset($_POST['uploadForm']) && !empty($_SESSION['user_id']) || preg_match('/(
                     $checkGroup = groupExist($user_id, $group);
                     if($checkPhotoGroup != true && $checkGroup != false && file_exists($group_dir)){
                         move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
-                        addGroupPhoto($user_id, $filename, $description, $checkGroup );
+                        addGroupPhoto($user_id, $filename, $description, $checkGroup, $latitude, $longitude);
                     } else {
                         echo "error";
                     }
@@ -70,7 +82,7 @@ if(isset($_POST['uploadForm']) && !empty($_SESSION['user_id']) || preg_match('/(
                         if(isset($_POST['private'])){
                            $private = 1; 
                         }
-                        addPhoto($user_id, $filename, $description, $private);
+                        addPhoto($user_id, $filename, $description, $private, $latitude, $longitude);
                     } else {
                         echo "error";
                     }
@@ -133,16 +145,18 @@ function photoGroupExist ($user_id, $photo, $group){
     }	
 }
 //Add photo
-function addPhoto($user_id, $filename, $description, $private){
+function addPhoto($user_id, $filename, $description, $private, $latitude, $longitude){
     global $dbConn;
     move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
     if (file_exists($filename)) {  
-        $sql = "INSERT INTO photos (image_title, user_id, description, private) VALUES(:image_title, :user_id,:description,:private)";
+        $sql = "INSERT INTO photos (image_title, user_id, description, private, latitude, longitude) VALUES(:image_title, :user_id,:description,:private,:latitude, :longitude)";
         $namedParameters = array();
         $namedParameters[':image_title'] = $filename;
         $namedParameters[':user_id'] = $user_id;
         $namedParameters[':description'] = $description;
         $namedParameters[':private'] = $private;
+        $namedParameters[':latitude'] = $latitude;
+        $namedParameters[':longitude'] = $longitude;
         $stmt = $dbConn->prepare($sql);
         $stmt->execute($namedParameters);  
         echo "success:".$dbConn->lastInsertId();  
@@ -151,15 +165,17 @@ function addPhoto($user_id, $filename, $description, $private){
     }
 }
 //Add photo to group
-function addGroupPhoto($user_id, $filename, $description, $groupId){
+function addGroupPhoto($user_id, $filename, $description, $groupId, $latitude, $longitude){
     global $dbConn;
     //Verify that the file was uploaded
     if (file_exists($filename)) {  
-        $sql = "INSERT INTO photos (image_title, user_id, description) VALUES(:image_title, :user_id,:description)";
+        $sql = "INSERT INTO photos (image_title, user_id, description, latitude, longitude) VALUES(:image_title, :user_id,:description, :latitude, :longitude)";
         $namedParameters = array();
         $namedParameters[':image_title'] = $filename;
         $namedParameters[':user_id'] = $user_id;
         $namedParameters[':description'] = $_POST['description'];
+        $namedParameters[':latitude'] = $latitude;
+        $namedParameters[':longitude'] = $longitude;
         $stmt = $dbConn->prepare($sql);
         $stmt->execute($namedParameters);  
         
