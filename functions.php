@@ -36,7 +36,7 @@
 
 	function geAllImages(){
 		global $dbConn;
-	    $sql = "SELECT * FROM photos INNER JOIN group_photos ON group_photos.photo_id = photos.photo_id INNER JOIN users ON users.user_id = photos.user_id INNER JOIN groups on groups.group_id = group_photos.group_id ORDER BY photos.photo_id DESC";
+	    $sql = "SELECT * FROM photos INNER JOIN users ON users.user_id = photos.user_id NATURAL LEFT OUTER JOIN group_photos ORDER BY photos.photo_id DESC";
 	    $stmt = $dbConn->prepare($sql);
 	    $stmt->execute();
 	    $result = $stmt->fetchAll(); 
@@ -52,11 +52,18 @@
 			echo "<strong>image Id:</strong> ".$photos['photo_id'];
             echo "<br>";
             if(!empty($photos['group_name'])){
-               echo "<strong>Goup Name:</strong> ".$photos['group_name']; 
+                echo "<strong>Goup Name:</strong> ".$photos['group_name']; 
+                echo "<strong>Goup ID:</strong> ".$photos['group_id']; 
             }
 			if(!empty($photos['description'])){
-				echo "<br>";
 				echo "<strong>Description:</strong> ".$photos['description'];
+			}
+			if($photos['latitude'] != 0 && $photos['longitude'] != 0){
+				echo "<br>";
+				echo "<strong>Latitude:</strong> ".$photos['latitude'];
+                echo "<br>";
+                echo "<strong>Longitude:</strong> ".$photos['longitude'];
+
 			}
 			echo '</p></div>';
 		}
