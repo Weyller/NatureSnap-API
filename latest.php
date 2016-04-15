@@ -24,16 +24,17 @@ $data[] = [
     'description'=>$photos['description'],
     'latitude'=>$photos['latitude'],
     'longitude'=>$photos['longitude'],
+    'group_id'=>$photos['group_id'],
     'private'=>$photos['private'],
     'views'=>$photos['views']
 ];
 }
-
-foreach($result as $photos){
-    if(!empty($photos['group_id'])){
-    array_push($data[] = $photos['group_id']);
-
-    }
+//If photo does not belong to a group, then remove the group_id key from array
+//So it doesn't return a null value for all non-group photos
+for($i=0; $i<count($data); $i++){
+   if(empty($data[$i]['group_id'])){
+       unset($data[$i]['group_id']);
+   } 
 }
 //PHP array to JSON array
 echo json_encode(array(
