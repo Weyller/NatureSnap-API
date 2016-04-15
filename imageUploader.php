@@ -15,6 +15,9 @@ if(isset($_POST['uploadForm'])
     $latitude = $_POST['latitude'];
     $longitude = $_POST['longitude'];
     
+    //PLaceholder for empty description
+    $description = "";
+    
     //Optional Parameters
     if(preg_match('/([a-zA-Z0-9_-]+)/s', $_POST['groupName'])){
        $group = $_POST['groupName'];
