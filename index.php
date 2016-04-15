@@ -176,9 +176,9 @@
     <td>Delete Photo Groups & Database entries</td>
     <td>Done</td>
   </tr>
-     <tr class="working">
+     <tr class="done">
     <td>Update Photo Groups</td>
-    <td></td>
+    <td>Done</td>
   </tr>
      <tr class="working">
     <td>Photo Comments - Add, Edit, Delete, Display</td>
@@ -260,42 +260,42 @@
   <tr class="done">
   	<td>Image Upload</td>
     <td>/imageUploader.php</td>
-    <td>filename, description,user_id</td>
+    <td>uploadForm, filename, description, group, latitude, longitude</td>
     <td>POST</td>
     <td></td>
   </tr>
     <tr class="done">
   	<td>Image Delete</td>
     <td>/deletePhoto.php</td>
-    <td>photo_id, user_id</td>
+    <td>deleteForm, photo_id</td>
     <td>POST</td>
     <td></td>
   </tr>
       <tr class="done">
   	<td>Image Update</td>
     <td>/updateImage.php</td>
-    <td>photo_id, filename, user_id</td>
+    <td>updateForm, photo_id, filename, description</td>
     <td>POST</td>
     <td></td>
   </tr>
 <tr class="done">
 	<td>Create Group</td>
 	<td>/group.php</td>
-	<td>addGroup, user_id, groupName</td>
+	<td>addGroup, groupName</td>
 	<td>POST</td>
 	<td></td>
 </tr>
 <tr class="done">
 	<td>Delete Group</td>
 	<td>/group.php</td>
-	<td>deleteGroup, user_id, groupName</td>
+	<td>deleteGroup, groupName</td>
 	<td>POST</td>
 	<td></td>
 </tr>
 <tr class="done">
-	<td>Edit Group</td>
+	<td>Edit Group Name</td>
 	<td>/group.php</td>
-	<td>editGroup, user_id, oldGroup, newGroup</td>
+	<td>editGroup, oldGroup, newGroup</td>
 	<td>POST</td>
 	<td></td>
 </tr>
