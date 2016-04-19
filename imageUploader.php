@@ -189,7 +189,7 @@ function addGroupPhoto($user_id, $filename, $description, $groupId, $latitude, $
         //Check if previous execution affected the rows
         //if so, then get lastInsertId() as the photo_id
         //then insert that id into the photo_groups table
-        if ($stmt->rowCount()){
+        if ($stmt->rowCount() > 0){
             $photo_id = $dbConn->lastInsertId();
             $sql = "INSERT INTO group_photos (group_id, photo_id) VALUES(:group_id,:photo_id)";
             $namedParameters = array();

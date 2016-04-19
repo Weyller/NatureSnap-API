@@ -30,7 +30,7 @@ if(isset($_POST['addGroup']) && !empty($_SESSION['user_id']) && preg_match('/([a
         $namedParameters[":user_id"] = $user_id;
         $stmt = $dbConn -> prepare($sql);
         $stmt -> execute($namedParameters);
-        if ($stmt->rowCount()){
+        if ($stmt->rowCount() > 0){
             echo "success";  
         } else {
             echo "error";
@@ -187,7 +187,7 @@ function editGroup ($user_id, $old, $new){
         $stmt = $dbConn -> prepare($sql);
         $stmt -> execute($namedParameters);
         //Check if rows were affected after execution
-        if ($stmt->rowCount()){
+        if ($stmt->rowCount() > 0){
             echo "success";
         } else {
             echo "error";
