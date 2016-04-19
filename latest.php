@@ -8,7 +8,14 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = isset($_GET['limit']) && $_GET['limit'] < 20 ? (int)$_GET['limit'] : 10;
 $start = ($page > 1) ? ($page * $limit) - $limit : 0;
 
-$sql = "SELECT * FROM photos INNER JOIN users ON users.user_id = photos.user_id NATURAL LEFT OUTER JOIN group_photos LIMIT {$start}, {$limit}";
+//Pages
+$rows = $dbConn->query("SELECT count(photo_id) FROM  photos")->fetchColumn();
+$total_pages = ceil($rows/$limit);
+
+//Fetch attributes related to each photo
+//Display group_id and group_name for each item that belongs to a group
+//If photo has no group, then remove those values from the specific item
+$sql = "SELECT photo_id,name,image_title,description,latitude,longitude,group_id,group_name, private, views FROM photos NATURAL JOIN users NATURAL LEFT JOIN group_photos NATURAL LEFT JOIN groups LIMIT {$start}, {$limit}";
 $stmt = $dbConn -> prepare($sql);
 $stmt -> execute();
 $result = $stmt->fetchAll(); 
@@ -25,6 +32,7 @@ $data[] = [
     'latitude'=>$photos['latitude'],
     'longitude'=>$photos['longitude'],
     'group_id'=>$photos['group_id'],
+    'group_name'=>$photos['group_name'],
     'private'=>$photos['private'],
     'views'=>$photos['views']
 ];
@@ -32,8 +40,9 @@ $data[] = [
 //If photo does not belong to a group, then remove the group_id key from array
 //So it doesn't return a null value for all non-group photos
 for($i=0; $i<count($data); $i++){
-   if(empty($data[$i]['group_id'])){
+   if(empty($data[$i]['group_id']) || $data[$i]['group_id'] == null){
        unset($data[$i]['group_id']);
+       unset($data[$i]['group_name']);
    } 
 }
 //PHP array to JSON array
