@@ -16,27 +16,25 @@
 	            $_SESSION['user_id'] = $result['user_id'];
 
                 //Declaray PHP array
-                $data = [];
-                $data[] = [
+                $data = array(
                     'success'=>true,
                     'user_id'=>$result['user_id'],
+                    'username'=>$result['username'],
                     'name'=>$result['name'],
                     'last_name'=>$result['last_name'],
                     'email'=>$result['email'],
                     'latest_login'=>$result['latest_login'],
                     'ip_address'=>$result['ip_address']
-            ];
+            );
                 //PHP array to JSON array
-                echo json_encode(array(
-                    'data' => $data 
-                ), JSON_NUMERIC_CHECK);
+                echo json_encode($data, JSON_NUMERIC_CHECK);
 	        } else {
                 $data[] = ['success'=>false];
-                echo json_encode(array('success'=>$data));
+                echo json_encode(array('success'=>false));
 	        }
 	    } else {
             $data[] = ['success'=>false];
-            echo json_encode(array('success'=>$data));
+            echo json_encode(array('success'=>false));
 	    }
 
 //Coordinated Universal Time (UTC)
