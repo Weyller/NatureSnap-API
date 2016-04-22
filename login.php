@@ -14,12 +14,29 @@
 	            updateDate($result['username'], SHA1($_POST['password']));
 	            $_SESSION['username'] = $result['username'];
 	            $_SESSION['user_id'] = $result['user_id'];
-	            echo "success";
+
+                //Declaray PHP array
+                $data = [];
+                $data[] = [
+                    'success'=>true,
+                    'user_id'=>$result['user_id'],
+                    'name'=>$result['name'],
+                    'last_name'=>$result['last_name'],
+                    'email'=>$result['email'],
+                    'latest_login'=>$result['latest_login'],
+                    'ip_address'=>$result['ip_address']
+            ];
+                //PHP array to JSON array
+                echo json_encode(array(
+                    'data' => $data 
+                ), JSON_NUMERIC_CHECK);
 	        } else {
-	            echo "error";
+                $data[] = ['success'=>false];
+                echo json_encode(array('success'=>$data));
 	        }
 	    } else {
-	    	echo "invalid";
+            $data[] = ['success'=>false];
+            echo json_encode(array('success'=>$data));
 	    }
 
 //Coordinated Universal Time (UTC)
