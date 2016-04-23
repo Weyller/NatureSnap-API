@@ -21,24 +21,20 @@ function getPhoto(){
     $stmt = $dbConn -> prepare($sql);
     $stmt -> execute($namedParameters);
     $result = $stmt->fetch();
-
     if(!empty($result)){
-        //Declaray PHP array
-        $data = [];
-        $data[] = [
+        //Initialize PHP array
+        $data = array(
             'photo_id'=>$result['photo_id'],
             'name'=>$result['name'],
             'image_name'=>$result['image_title'],
             'description'=>$result['description'],
             'private'=>$result['private'],
             'views'=>$result['views']
-        ];
+        );
         //PHP array to JSON array
-        echo json_encode(array(
-            'data' => $data 
-        ), JSON_NUMERIC_CHECK);
+        echo json_encode($data, JSON_NUMERIC_CHECK);
     } else {
-        echo json_encode(["data"=>[]]);
+        echo json_encode(array('success'=>false));
     }
 }
 

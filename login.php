@@ -26,14 +26,11 @@
                     'latest_login'=>$result['latest_login'],
                     'ip_address'=>$result['ip_address']
             );
-                //PHP array to JSON array
                 echo json_encode($data, JSON_NUMERIC_CHECK);
 	        } else {
-                $data[] = ['success'=>false];
                 echo json_encode(array('success'=>false));
 	        }
 	    } else {
-            $data[] = ['success'=>false];
             echo json_encode(array('success'=>false));
 	    }
 
