@@ -248,7 +248,7 @@
     <td>/login.php</td>
     <td>username, password</td>
     <td>POST</td>
-    <td></td>
+    <td>JSON</td>
   </tr>
   <tr class="done">
   	<td>Register</td>
