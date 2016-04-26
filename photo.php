@@ -28,7 +28,7 @@ function getPhoto(){
             'name'=>$result['name'],
             'image_name'=>$result['image_title'],
             'description'=>$result['description'],
-            'private'=>$result['private'],
+            'priv'=>$result['private'],
             'views'=>$result['views']
         );
         //PHP array to JSON array
@@ -60,7 +60,7 @@ function getGroupPhotos(){
                 'group_id'=>$photos['group_id'],
                 'image_name'=>$photos['image_title'],
                 'description'=>$photos['description'],
-                'private'=>$photos['private'],
+                'priv'=>$photos['private'],
                 'views'=>$photos['views']
             ];
         }
