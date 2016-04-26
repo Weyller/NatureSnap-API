@@ -9,7 +9,7 @@ if(!empty($_GET['photo_id']) && (int)$_GET['photo_id']){
 } elseif(!empty($_GET['group_id']) && (int)$_GET['group_id']){
     getGroupPhotos();
 } else {
-    echo json_encode(["data"=>[]]);
+    echo json_encode(["success"=>false];
 }
 
 //Get one photo
@@ -29,7 +29,8 @@ function getPhoto(){
             'image_name'=>$result['image_title'],
             'description'=>$result['description'],
             'priv'=>$result['private'],
-            'views'=>$result['views']
+            'views'=>$result['views'],
+            'success'=>true
         );
         //PHP array to JSON array
         echo json_encode($data, JSON_NUMERIC_CHECK);
@@ -66,7 +67,8 @@ function getGroupPhotos(){
         }
         //PHP array to JSON array
         echo json_encode(array(
-            'data' => $data 
+            'data' => $data,
+            'success' => true
         ), JSON_NUMERIC_CHECK);
     } else {
         echo json_encode(["data"=>[]]);
