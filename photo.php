@@ -9,7 +9,7 @@ if(!empty($_GET['photo_id']) && (int)$_GET['photo_id']){
 } elseif(!empty($_GET['group_id']) && (int)$_GET['group_id']){
     getGroupPhotos();
 } else {
-    echo json_encode(["success"=>false];
+    echo json_encode(["success"=>false]);
 }
 
 //Get one photo
