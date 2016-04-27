@@ -197,12 +197,12 @@ function addGroupPhoto($user_id, $filename, $description, $groupId, $latitude, $
             $namedParameters[':photo_id'] =  $photo_id;  
             $stmt = $dbConn->prepare($sql);
             $stmt->execute($namedParameters); 
-            echo "success";  
+            //echo "success";  
         } else {
-            echo "error";
+            //echo "error";
         }
     } else {
-        echo "error";
+        //echo "error";
     }
 }
 //Get group_id if it exist
