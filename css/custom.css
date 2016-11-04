@@ -1,0 +1,103 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    color: #666;
+    margin: 0px;
+    line-height: 1.5em;
+}
+.album {
+    background: #eef2f5;
+}
+img {
+    max-width:100%;
+}
+.card {
+    width:30.3%;
+    margin-right:2.3%;
+    margin-bottom:2.3%;
+    padding:0px;    
+    box-shadow: 0 2px 1px rgba(0, 0, 0, .05);
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.card-text {
+    font-size: 13px;
+    line-height: 25px
+}
+.card > img {
+    margin-bottom:0px;
+}
+.form-signin {
+    float:right;
+}
+.form-signin input{
+    border-radius:2px;
+    font-size:13px;
+    padding:5px 10px;
+    border:transparent;
+}
+.form-signin [type=submit] {
+    padding-top:7px;
+    padding-bottom:6px;
+}
+.menu {
+    background:#295985;
+    border-radius:0px;
+}
+.menu a {
+    line-height:50px;
+    color:#c3d7e1;
+    font-weight: 400;
+    font-size:13px;
+}
+.user {
+    float:right;
+    
+}
+.user .name {
+    color:#c3d7e1; 
+    font-weight:300;
+}
+.user .icon {
+    color:#c3d7e1;
+    padding-left:6px;
+}
+#team .card-title {
+    font-size:16px;
+}
+/* Dropdown Button */
+.dropbtn {
+    background-color: inherit;
+    color: gray;
+    padding: 14px;
+    border: none;
+    cursor: pointer;
+}
+.dropdown {
+    float:right;
+    position: relative;
+    display: inline-block;
+    background-color: inherit;
+    z-index: 99;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #326ea5;
+    min-width: 160px;
+    right:0px;
+}
+.dropdown-content a {
+    color: #fff;
+    padding: 12px 14px;
+    text-decoration: none;
+    display: block;
+    font-size:13px;
+}
+.dropdown-content a:hover {background-color: #444}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown:hover .dropbtn {
+    background-color: #326ea5;
+}

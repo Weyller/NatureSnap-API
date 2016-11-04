@@ -37,6 +37,13 @@ input[type="password"]{
 	margin-bottom: 15px;
 	padding: 7px 9px;
 }
+
+#username.red,#password.red{
+    border-color:coral;
+}
+#username.green,#password.green{
+border-color:#2ECC71;
+}
 input[type="submit"],button {
 background: #2ECC71;
 color:#fff;
@@ -101,15 +108,29 @@ table, th, td {
 table {
     border-collapse: collapse;
 }
-#search {
-	display:inline-block;
-}
-
 .logged {
 	background:#27AE60;
 	color:#fff;
 	padding:5px;
 }
 .uploader {
+    display:inline-block;
+}
+
+.login,.register {
+    position:relative;
+}
+.login a,.register a{
+    display:inline-block;
+    background:lightseagreen;
+    cursor:pointer;
+}
+
+.login .form-signin,.register .form-signup {
+    display:none;
+    position:absolute;
+    right:0px;
+}
+.login.active .form-signin,.register.active .form-signup {
     display:inline-block;
 }

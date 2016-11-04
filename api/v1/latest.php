@@ -1,6 +1,6 @@
 <?php
 header('Content-type: application/json');
-require '../db.php';
+require '../../../db.php';
 $dbConn = getConnection();	
 
 //Pagination
@@ -9,13 +9,13 @@ $limit = isset($_GET['limit']) && $_GET['limit'] < 20 ? (int)$_GET['limit'] : 10
 $start = ($page > 1) ? ($page * $limit) - $limit : 0;
 
 //Pages
-$rows = $dbConn->query("SELECT count(photo_id) FROM  photos")->fetchColumn();
+$rows = $dbConn->query("SELECT COUNT(photo_id) FROM photos")->fetchColumn();
 $total_pages = ceil($rows/$limit);
 
 //Fetch attributes related to each photo
 //Display group_id and group_name for each item that belongs to a group
 //If photo has no group, then remove those values from the specific item
-$sql = "SELECT photo_id,name,image_title,description,latitude,longitude,group_id,group_name, private, views FROM photos NATURAL JOIN users NATURAL LEFT JOIN group_photos NATURAL LEFT JOIN groups LIMIT {$start}, {$limit}";
+$sql = "SELECT photo_id,username,name,image_title,description,latitude,longitude,group_id,group_name, private, views,timestamp FROM photos NATURAL JOIN users NATURAL LEFT JOIN group_photos NATURAL LEFT JOIN groups ORDER BY photo_id DESC LIMIT {$start}, {$limit}" ;
 $stmt = $dbConn -> prepare($sql);
 $stmt -> execute();
 $result = $stmt->fetchAll(); 
@@ -23,9 +23,14 @@ $result = $stmt->fetchAll();
 //Declaray PHP array
 $data = [];
 foreach($result as $photos){
+    $day = date("d", strtotime($photos['timestamp']));
+    $month = date("M", strtotime($photos['timestamp']));
+    $year = date("Y", strtotime($photos['timestamp']));
+    $date = $month." ".$day.", ".$year;
 //Add data to PHP array
 $data[] = [
     'photo_id'=>$photos['photo_id'],
+    'username'=>$photos['username'],
     'name'=>$photos['name'],
     'image_name'=>$photos['image_title'],
     'description'=>$photos['description'],
@@ -34,7 +39,8 @@ $data[] = [
     'group_id'=>$photos['group_id'],
     'group_name'=>$photos['group_name'],
     'private'=>$photos['private'],
-    'views'=>$photos['views']
+    'views'=>$photos['views'],
+    'timestamp'=>$date
 ];
 }
 //If photo does not belong to a group, then remove the group_id key from array
