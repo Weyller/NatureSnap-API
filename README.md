@@ -16,9 +16,11 @@ REST API - This is where you can update all the API for the website NatureSnap
 
 ##Web Interface Features - AJAX - JSON
 * Login
+* Logout
 * Display one photo on page.php when clicked on home page
 * Display latest photos on home page using Masonry layout
 * Upload Photo
+* Delete Photo
 * Show NatureSnap team - GitHub API
 
 ##Credits
