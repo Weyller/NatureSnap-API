@@ -1,92 +1,92 @@
 <?php
-    require '../db.php';
-    session_start();
-    $dbConn = getConnection();	
+require '../../../db.php';
+session_start();
+$dbConn = getConnection();	
 	
-	if(isset($_POST['updateForm']) && !empty($_POST['photo_id']) && !empty($_SESSION['user_id']) || preg_match('/([a-zA-Z0-9_-]+)/s', isset($_POST['description']))) {
-        $user_id = $_SESSION['user_id'];
-        
-        //Check if file is in a valid format
-		if($_FILES['filename']['tmp_name']){
-	        $imageType = exif_imagetype($_FILES['filename']['tmp_name'] ); //Returns 1 if gif, 2 if jpg, 3 if png
-	        if($imageType !=1 && $imageType !=2 && $imageType !=3) {
-	            unlink($_FILES['filename']['tmp_name']);//Delete files
-	        }
-		}
-        //If file is in a valid format, then don't delete and move it to the appropriate location
-        //Retrieve image title and user_id using the photo_id parameter
-		if($_FILES['filename']['tmp_name'] || !empty($_POST['description'])){
-			$sql = "SELECT image_title, users.user_id FROM photos INNER JOIN users ON users.user_id = photos.user_id WHERE photo_id=:photo_id AND users.user_id=:user_id";
-		    $namedParameters = array();
-			$namedParameters[':photo_id'] = $_POST['photo_id'];
-			$namedParameters[':user_id'] = $user_id;
-		    $stmt = $dbConn->prepare($sql);
-		    $stmt->execute($namedParameters);  
-			$result = $stmt->fetch(); 
-            
-            //Check if photo belongs to group
-            $group_id = checkGroupPhoto($user_id, $_POST['photo_id']);
-                
-			//Prevent one user from updating other user's photos
-			if($result['user_id'] == $user_id){
-                
-                //Boolean for editing files
-                $editFile = 0;
-                
-                $filename = null;
-				if($_FILES['filename']['tmp_name']){
-					//Uploads Directory, user folders will be created here for every user when they upload their first image
-				    $target_dir = "uploads";
-                    
-                    //If a group photo is updated, then move the uploaded file into
-                    //the correct group folder, do the same for regular photos
-                    if($group_id !=false){ //Move file into the group folder folder
-                        $filename = $target_dir."/".$_SESSION['user_id']."/".$group_id."/".basename($_FILES['filename']['name']);
-                        if(!file_exists($filename)){
-                            //Unlink old photo before inserting new photo
-                            $oldFile = "".$result['image_title']."";
-                            if(file_exists($oldFile)){
-                               unlink($oldFile);
-                            }
-                            move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
-                            $editFile = 1;
-                        } else {
-                            $filename = null;
+if(isset($_POST['updateForm']) && !empty($_POST['photo_id']) && !empty($_SESSION['user_id']) || preg_match('/([a-zA-Z0-9_-]+)/s', isset($_POST['description']))) {
+    $user_id = $_SESSION['user_id'];
 
-                        }
-                    } else { //Move file into the user folder
-                        $filename = $target_dir."/". $_SESSION['user_id'] . "/" .basename($_FILES['filename']['name']);
-                        if(!file_exists($filename)){
-                            //Unlink old photo before inserting new photo
-                            $oldFile = "".$result['image_title']."";
-                            if(file_exists($oldFile)){
-                               unlink($oldFile);
-                            }
-                            move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
-                            $editFile = 1;
-                        } else {
-                            $filename = null;
-                        }
-                    }
-				}
-                //Call function only if one of the two parameters is valid
-                //Check if file has been proccesses or if a description is provided
-                //One of both parameters can be sent
-                if($editFile == true || !empty($_POST['description'] )){
-                    updatePhoto($editFile, $_POST['description'], $filename, $_POST['photo_id']);
-                } else {
-                    echo "error";
-                }
-			} else {
-				echo "unauthorized";
-			}
-            
-        } else {
-            echo "invalid";
-	   }
-    } else{ //No parameters are provided
-        echo "invalid";
+    //Check if file is in a valid format
+    if($_FILES['filename']['tmp_name']){
+        $imageType = exif_imagetype($_FILES['filename']['tmp_name'] ); //Returns 1 if gif, 2 if jpg, 3 if png
+        if($imageType !=1 && $imageType !=2 && $imageType !=3) {
+            unlink($_FILES['filename']['tmp_name']);//Delete files
+        }
     }
+    //If file is in a valid format, then don't delete and move it to the appropriate location
+    //Retrieve image title and user_id using the photo_id parameter
+    if($_FILES['filename']['tmp_name'] || !empty($_POST['description'])){
+        $sql = "SELECT image_title, users.user_id FROM photos INNER JOIN users ON users.user_id = photos.user_id WHERE photo_id=:photo_id AND users.user_id=:user_id";
+        $namedParameters = array();
+        $namedParameters[':photo_id'] = $_POST['photo_id'];
+        $namedParameters[':user_id'] = $user_id;
+        $stmt = $dbConn->prepare($sql);
+        $stmt->execute($namedParameters);  
+        $result = $stmt->fetch(); 
+
+        //Check if photo belongs to group
+        $group_id = checkGroupPhoto($user_id, $_POST['photo_id']);
+
+        //Prevent one user from updating other user's photos
+        if($result['user_id'] == $user_id){
+
+            //Boolean for editing files
+            $editFile = 0;
+
+            $filename = null;
+            if($_FILES['filename']['tmp_name']){
+                //Uploads Directory, user folders will be created here for every user when they upload their first image
+                $target_dir = "uploads";
+
+                //If a group photo is updated, then move the uploaded file into
+                //the correct group folder, do the same for regular photos
+                if($group_id !=false){ //Move file into the group folder folder
+                    $filename = $target_dir."/".$_SESSION['user_id']."/".$group_id."/".basename($_FILES['filename']['name']);
+                    if(!file_exists($filename)){
+                        //Unlink old photo before inserting new photo
+                        $oldFile = "".$result['image_title']."";
+                        if(file_exists($oldFile)){
+                           unlink($oldFile);
+                        }
+                        move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
+                        $editFile = 1;
+                    } else {
+                        $filename = null;
+
+                    }
+                } else { //Move file into the user folder
+                    $filename = $target_dir."/". $_SESSION['user_id'] . "/" .basename($_FILES['filename']['name']);
+                    if(!file_exists($filename)){
+                        //Unlink old photo before inserting new photo
+                        $oldFile = "".$result['image_title']."";
+                        if(file_exists($oldFile)){
+                           unlink($oldFile);
+                        }
+                        move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
+                        $editFile = 1;
+                    } else {
+                        $filename = null;
+                    }
+                }
+            }
+            //Call function only if one of the two parameters is valid
+            //Check if file has been proccesses or if a description is provided
+            //One of both parameters can be sent
+            if($editFile == true || !empty($_POST['description'] )){
+                updatePhoto($editFile, $_POST['description'], $filename, $_POST['photo_id']);
+            } else {
+                echo json_encode("error");
+            }
+        } else {
+            echo json_encode("unauthorized");
+        }
+
+    } else {
+        echo json_encode("invalid");
+   }
+} else{ //No parameters are provided
+    echo json_encode("invalid");
+}
 
 //Check if photo belongs to a group
 function checkGroupPhoto($user_id,$photo_id){
@@ -132,5 +132,5 @@ function updatePhoto($editFile, $description, $filename, $photo_id){
     }
     $stmt = $dbConn->prepare($sql);
     $stmt->execute($namedParameters);  
-    echo "success";
+    echo json_encode("success");
 }

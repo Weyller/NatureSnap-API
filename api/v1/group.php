@@ -48,7 +48,7 @@ if(isset($_POST['addGroup']) && !empty($_SESSION['user_id']) && preg_match('/([a
         chmod($target_dir."/".$_SESSION['user_id'].'/'.$last, 0777);
         umask($old_group);
     } else {
-        echo "error";
+        echo json_encode("error");
     }
 } 
 //Delete group from database
@@ -62,10 +62,10 @@ elseif(isset($_POST['deleteGroup']) && !empty($_SESSION['user_id']) && preg_matc
     if($group_id != null){
         $target_dir = "uploads";
         if (!file_exists($target_dir."/".$user_id)) {    
-          echo "invalid"; 
+          echo json_encode("invalid");
         } else {    
             if(!file_exists($target_dir."/".$user_id.'/'.$group_id)){
-                echo "invalid";
+                echo json_encode("invalid");
             } else {
                 deleteGroupPhotos($target_dir, $group_id, $groupName, $user_id);        
             }
@@ -78,7 +78,7 @@ elseif(isset($_POST['deleteGroup']) && !empty($_SESSION['user_id']) && preg_matc
 elseif(isset($_POST['editGroup']) && !empty($_SESSION['user_id']) && preg_match('/([a-zA-Z0-9_-]+)/s', $_POST['oldGroup']) && preg_match('/([a-zA-Z0-9_-]+)/s', $_POST['newGroup']) ){
     editGroup($_SESSION['user_id'],$_POST['oldGroup'],$_POST['newGroup']);
 } else {
-    echo "error";
+    echo json_encode("error");
 }
 
 //Check if group already exist
@@ -143,9 +143,9 @@ function deleteGroupPhotos($target_dir, $group_id, $groupName, $user_id){
         //Finally, delete group folder and files
         deleteFolder($target_dir."/".$user_id.'/'.$group_id);
         
-        echo "success";
+        echo json_encode("success");
     } catch(Exception $e){
-        echo "error";
+        echo json_encode("error");
         $dbConn->rollBack();
     }
 }
@@ -188,12 +188,12 @@ function editGroup ($user_id, $old, $new){
         $stmt -> execute($namedParameters);
         //Check if rows were affected after execution
         if ($stmt->rowCount() > 0){
-            echo "success";
+            echo json_encode("success");
         } else {
-            echo "error";
+            echo json_encode("error");
         }
     } else {
-        echo "error";
+        echo json_encode("error");
     }
 }
 //Group ID
