@@ -1,3 +1,8 @@
+/*
+    Author: Juan Vargas
+    Project: NatureSnap API
+    Version 1.0
+*/
 function getPhoto(photo_id,username){
     $.ajax({
         url:'api/v1/photo.php',
@@ -81,8 +86,27 @@ function latest(){
 function registration(){
     
 }
-function uploadPhoto(){
-    
+function uploadPhoto(event){
+    event.stopPropagation();
+    event.preventDefault();
+    $.ajax({
+        url:'api/v1/imageUploader.php',
+        type:'POST',
+        dataType:'JSON',
+        cache: false,
+        processData: false,
+        contentType: false,
+        data:{
+            uploadForm:'',
+            latitude: $("#latitude").val(),
+            longitude: $("#longitude").val(),
+            private: $("#private").val(),
+            groupName: $("#groupName").val()
+        },
+        success: function(data){
+            
+        }
+    });
 }
 function updatePhoto(){
     
