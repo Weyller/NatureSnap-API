@@ -3,18 +3,18 @@
       <ul>
         <li><a href="index.php">Home</a></li>
         <li><a href="team.php">Team</a></li>
-          <?php if(!empty($_SESSION['username'])):?>
-  <div class="user">
-        <div class="dropdown">
-        <button class="dropbtn"><span class="name"><?php echo $_SESSION['username'] ?></span><span class="icon">&#9776;</span></button>
-        <div class="dropdown-content">
-          <li data-toggle="modal" data-target="#uploadPhoto">Upload Photo</li>
-          <li data-toggle="modal" data-target="#createGroup">Create Group</li>
-          <li onclick="logout();">Logout</li>
+        <?php if(!empty($_SESSION['username'])):?>
+        <div class="user">
+            <div class="dropdown">
+            <button class="dropbtn"><span class="name"><?php echo $_SESSION['username'] ?></span><span class="icon">&#9776;</span></button>
+            <div class="dropdown-content">
+              <li data-toggle="modal" data-target="#uploadPhoto">Upload Photo</li>
+              <li data-toggle="modal" data-target="#createGroup">Create Group</li>
+              <li onclick="logout();">Logout</li>
+            </div>
+          </div>
         </div>
-      </div>
-      </div>
-<?php endif; ?>
+        <?php endif; ?>
       </ul>
 
 <?php if(empty($_SESSION['username'])):?>
@@ -39,19 +39,18 @@
         <h4 class="modal-title" id="myModalLabel">Upload Image</h4>
       </div>
       <div class="modal-body">
-             <form method="POST" enctype="multipart/form-data" action="api/v1/imageUploader.php">
+      <form method="POST" enctype="multipart/form-data">
           <input type="file" name="filename" />
-          <br>Latitude: <br><input type="text" name="latitude" /><br>
-          <br>Longitude: <br><input type="text" name="longitude" /><br>
-          <br>Group Name: <br><input type="text" name="groupName" /><br>
-          <br>Description: <br><input type="text" name="description" /><br>
-          Private: <input type="checkbox" name="private" /><br><br>
+          <br>Latitude: <br><input type="text" id="latitude" name="latitude" /><br>
+          <br>Longitude: <br><input type="text" id="longitude" name="longitude" /><br>
+          <br>Group Name: <br><input type="text" id="groupName" name="groupName" /><br>
+          <br>Description: <br><input type="text" id="description" name="description" /><br>
+          Private: <input type="checkbox" id="private" name="private" /><br><br>
           <input type="submit" value="Upload" name="uploadForm" />
       </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>

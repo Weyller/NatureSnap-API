@@ -1,7 +1,6 @@
 <?php session_start() ?>
 <?php include("head.php");?>
 <?php include("header.php");?>
-
 <div class="album">
     <div class="container">
         <div class="row">
@@ -9,9 +8,7 @@
         </div>
     </div>
 </div>
-
 <?php include("footer.php");?>
-
 <?php if(!empty($_GET['photo_id']) && (int)$_GET['photo_id']) : ?>
 <script>
     <?php 

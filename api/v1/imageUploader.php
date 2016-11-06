@@ -1,4 +1,5 @@
 <?php
+header('Content-type: application/json');
 require '../../../db.php';
 session_start();
 $dbConn = getConnection();	
@@ -56,9 +57,9 @@ if(isset($_POST['uploadForm'])
 
         //Check if file exist in user folder or in user group folder
         if(!empty($_POST['groupName']) && $group_id != false && file_exists($target_dir."/".$_SESSION['user_id']."/".$group_id."/".basename($photo ))){
-            echo "exists";
+            echo json_encode("exists");
         } elseif(empty($_POST['groupName']) && file_exists($target_dir."/".$_SESSION['user_id']."/".basename($photo ))){
-            echo "exists";
+            echo json_encode("exists");
         }   
         //If file does not exists, then move file into the user folder or group folder
         else {                
@@ -74,7 +75,7 @@ if(isset($_POST['uploadForm'])
                     move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
                     addGroupPhoto($user_id, $filename, $description, $checkGroup, $latitude, $longitude);
                 } else {
-                    echo "error";
+                    echo json_encode("error");
                 }
             }
 
@@ -89,19 +90,18 @@ if(isset($_POST['uploadForm'])
                     if(isset($_POST['private'])){
                        $private = 1; 
                     }
-
                     move_uploaded_file($_FILES['filename']['tmp_name'], $filename );
                     addPhoto($user_id, $filename, $description, $private, $latitude, $longitude,$timestamp);
                 } else {
-                    echo "error";
+                    echo json_encode("error");
                 }
             }
         }
     }
 } elseif(!$_FILES['filename']['tmp_name']){
-    echo "nothing";
+    echo json_encode("nothing");
 } else {
-    echo "invalid";
+    echo json_encode("invalid");
 }
 //Check if entry for photo  already exists
 function photoExist ($user_id, $photo){
@@ -167,9 +167,10 @@ function addPhoto($user_id, $filename, $description, $private, $latitude, $longi
         $namedParameters[':timestamp'] = $timestamp;
         $stmt = $dbConn->prepare($sql);
         $stmt->execute($namedParameters);  
-        echo "success:".$dbConn->lastInsertId();  
+        //echo "success:".$dbConn->lastInsertId();  
+        echo json_encode("success");
     } else {
-        echo "error";
+        echo json_encode("error");
     }
 }
 //Add photo to group
@@ -198,12 +199,13 @@ function addGroupPhoto($user_id, $filename, $description, $groupId, $latitude, $
             $namedParameters[':photo_id'] =  $photo_id;  
             $stmt = $dbConn->prepare($sql);
             $stmt->execute($namedParameters); 
-            echo "success:".$photo_id;  
+            //echo "success:".$photo_id;  
+            echo json_encode("success");
         } else {
-            echo "error";
+            echo json_encode("error");
         }
     } else {
-        echo "error";
+        echo json_encode("error");
     }
 }
 //Get group_id if it exist
@@ -222,4 +224,3 @@ function getGroupId($group, $user_id){
         return false;
     }
 }
-
