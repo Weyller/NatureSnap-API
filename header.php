@@ -1,25 +1,21 @@
-
-<div class="navbar-collapse collapse inverse" id="navbar-header">
-  <div class="container-fluid">
-    <div class="about">
-      <h4>About</h4>
-      <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
-    </div>
-    <div class="social">
-      <h4>Contact</h4>
-      <ul class="list-unstyled">
-        <li><a href="#">Follow on Twitter</a></li>
-        <li><a href="#">Like on Facebook</a></li>
-        <li><a href="#">Email me</a></li>
-      </ul>
-    </div>
-  </div>
-    
-</div>
 <div class="navbar navbar-static-top navbar-dark menu">
   <div class="container">
-    <a href="index.php">Home</a>
-      <a href="team.php">Team</a>
+      <ul>
+        <li><a href="index.php">Home</a></li>
+        <li><a href="team.php">Team</a></li>
+          <?php if(!empty($_SESSION['username'])):?>
+  <div class="user">
+        <div class="dropdown">
+        <button class="dropbtn"><span class="name"><?php echo $_SESSION['username'] ?></span><span class="icon">&#9776;</span></button>
+        <div class="dropdown-content">
+          <li data-toggle="modal" data-target="#uploadPhoto">Upload Photo</li>
+          <li data-toggle="modal" data-target="#createGroup">Create Group</li>
+          <li onclick="logout();">Logout</li>
+        </div>
+      </div>
+      </div>
+<?php endif; ?>
+      </ul>
 
 <?php if(empty($_SESSION['username'])):?>
 <form class="navbar-form navbar-right form-signin" role="form" onclick="login();">
@@ -28,18 +24,7 @@
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
 <?php endif; ?>
-<?php if(!empty($_SESSION['username'])):?>
-      <div class="user">
-            <div class="dropdown">
-            <button class="dropbtn"><span class="name"><?php echo $_SESSION['username'] ?></span><span class="icon">&#9776;</span></button>
-            <div class="dropdown-content">
-              <a href="latest" data-toggle="modal" data-target="#uploadPhoto">Upload Photo</a>
-              <a href="popular" data-toggle="modal" data-target="#createGroup">Create Group</a>
-              <a href="api/v1/logout.php">Logout</a>
-            </div>
-          </div>
-          </div>
-<?php endif; ?>
+
 </div>
 </div>
 
@@ -72,7 +57,7 @@
   </div>
 </div>
     
-    <!-- Create Group Modal -->
+<!-- Create Group Modal -->
 <div class="modal fade" id="createGroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

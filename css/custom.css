@@ -5,6 +5,9 @@ body {
     margin: 0px;
     line-height: 1.5em;
 }
+a,a:hover {
+    text-decoration: none;
+}
 .album {
     background: #eef2f5;
 }
@@ -40,18 +43,37 @@ img {
     padding-top:7px;
     padding-bottom:6px;
 }
+.navbar {
+    padding:0px;
+}
 .menu {
     background:#295985;
     border-radius:0px;
 }
-.menu a {
-    line-height:50px;
+.menu ul {
+    margin:0px;
+    padding:0px;
+    height:20px;
+}
+.menu li {
+    list-style: none;
     color:#c3d7e1;
     font-weight: 400;
     font-size:13px;
+    float:left;
+}
+.menu ul li a {
+    color:#c3d7e1;
+    line-height: 50px;
+    display: inline-block;
+    padding: 14px 10px;
+}
+.menu ul li a:hover {
+    background-color: #326ea5;
 }
 .user {
     float:right;
+    line-height: 50px;
     
 }
 .user .name {
@@ -87,14 +109,16 @@ img {
     min-width: 160px;
     right:0px;
 }
-.dropdown-content a {
+.dropdown-content li {
+    cursor: pointer;
+    line-height:30px;
     color: #fff;
     padding: 12px 14px;
     text-decoration: none;
-    display: block;
+    width:100%;
     font-size:13px;
 }
-.dropdown-content a:hover {background-color: #444}
+.dropdown-content li:hover {background-color: #444}
 .dropdown:hover .dropdown-content {
     display: block;
 }

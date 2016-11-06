@@ -22,6 +22,12 @@
             }
     ?>
     getPhoto(<?php echo $photo_id ?>, "<?php echo $username ?>");
-        
+    
+//Call DeletePhoto Function
+$(document).on("click",".btn-danger",function(e) {
+    e.preventDefault();
+    var photo_id = $(this).attr("href");
+    deletePhoto(photo_id);
+});
 </script>
 <?php endif; ?>

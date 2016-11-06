@@ -29,10 +29,10 @@
         $namedParameters[':user_id'] = $user_id;
         $stmt = $dbConn->prepare($sql);
         $stmt->execute($namedParameters);  
-        echo "success";
+        echo json_encode("success");
     } else {
-        echo "unauthorized";
+        echo json_encode("unauthorized");
 	}
 } else {
-	echo "invalid";
+	echo json_encode("invalid");
 }

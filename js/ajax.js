@@ -13,7 +13,7 @@ function getPhoto(photo_id,username){
                 var options = $("<div class='card'>");
                 var deleteBtn = $("<a class='btn btn-danger'>").attr("href", photo_id).html("Delete").appendTo(options);
                 var updateBtn = $("<a class='btn btn-primary'>").attr("href", photo_id).html("Update").appendTo(options);
-                $(".row").prepend(options);
+                $(".row").append(options);
             } 
         }
     });
@@ -41,7 +41,17 @@ function login(){
       return false;
     });
 }
-
+function logout(){
+    $.ajax({
+        url:'api/v1/logout.php',
+        dataType:'JSON',
+        success: function(data){
+            if(data=="logout"){
+                window.location.href="index.php";
+            }
+        }
+    });
+}
 function latest(){
   $.ajax({
     url:'api/v1/latest.php',
@@ -56,10 +66,8 @@ function latest(){
         var photo_link = $("<a>").attr("href","page.php?photo_id="+item.photo_id).html(item.timestamp);
         var timestamp = $("<span>").append(item.timestamp);
         var card = $("<div class='card-block'>").append(photo_link,description);
-
         var item = $("<div class='card'>").append(image,card);
         $(".row").append(item);
-
         var $container = $('.album .row');
         $container.imagesLoaded( function() {
           $container.masonry({
@@ -79,8 +87,22 @@ function uploadPhoto(){
 function updatePhoto(){
     
 }
-function deletePhoto(){
-    
+function deletePhoto(photo_id){
+    $.ajax({
+        url:'api/v1/deletePhoto.php',
+        type:'POST',
+        dataType:'JSON',
+        data:{
+            deleteForm: '',
+            photo_id: photo_id
+        },
+        success: function(data){
+            if(data=="success"){
+               window.location.href="index.php";
+            }
+        }
+        
+    });
 }
 function createGroup(){
     
