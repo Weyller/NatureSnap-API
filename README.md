@@ -1,5 +1,5 @@
 # NatureSnap-API
-REST API - This is where you can update all the API for the website NatureSnap
+REST API created using PHP/MySQL. Web User Interface created using Bootstrap 4 and jQuery. This API provides the endpoints to an Android application to receive and send the data.
 
 ##API Features
 * Registration
@@ -14,7 +14,13 @@ REST API - This is where you can update all the API for the website NatureSnap
 * Display Photo
 * Display Latest Photos with Pagination
 
-##Web Interface Features - AJAX - JSON
+##API to-do
+* Resize large images
+* Stored images in Amazon S3
+* Include functional comments endpoint
+* Include relational database design diagram of API
+
+##Web User Interface Features - AJAX - JSON
 * Login
 * Logout
 * Display one photo on page.php when clicked on home page
@@ -22,6 +28,11 @@ REST API - This is where you can update all the API for the website NatureSnap
 * Upload Photo
 * Delete Photo
 * Show NatureSnap team - GitHub API
+
+##User Interface to-do - AJAX
+* Load More Button
+* Delete Photo
+* Update Photo
 
 ##Credits
 * <a target="_blank" href="https://v4-alpha.getbootstrap.com">Bootstrap 4</a>
