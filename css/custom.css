@@ -125,3 +125,28 @@ img {
 .dropdown:hover .dropbtn {
     background-color: #326ea5;
 }
+.date {
+    font-size:11px;
+    color:inherit;
+    text-transform: uppercase;
+}
+.stats {
+    padding:0px;
+    margin:0px;
+    display: inline-block;
+    width:100%;
+}
+.stats li {
+    list-style: none;
+    float:left;
+    margin-right:10px;
+}
+.stats li.right {
+ float:right;   
+}
+.stats .comment, .stats .like {
+    background:#fff;
+    border-radius:50%;
+    cursor: pointer;
+    color:#999;
+}
