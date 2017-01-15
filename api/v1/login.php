@@ -25,7 +25,10 @@
                 'last_name'=>$result['last_name'],
                 'email'=>$result['email'],
                 'latest_login'=>$result['latest_login'],
-                'ip_address'=>$result['ip_address']
+                'ip_address'=>$result['ip_address'],
+                'session_id'=>session_id(),
+                'session_username'=>$_SESSION['username'],
+                'session_user_id'=>$_SESSION['user_id']
         );
             echo json_encode($data, JSON_NUMERIC_CHECK);
         } else {
