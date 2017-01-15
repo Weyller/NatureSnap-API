@@ -18,4 +18,13 @@
 <?php include("footer.php");?>
 <script>  
 latest();
+
+//Call likePhoto Function
+$(document).on("click",".like",function(e) {
+    e.preventDefault();
+    var photo_id = $(this).attr("data-photo");
+    likePhoto(photo_id);
+});
 </script>
+
+

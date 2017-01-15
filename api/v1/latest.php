@@ -15,7 +15,7 @@ $total_pages = ceil($rows/$limit);
 //Fetch attributes related to each photo
 //Display group_id and group_name for each item that belongs to a group
 //If photo has no group, then remove those values from the specific item
-$sql = "SELECT photo_id,username,name,image_title,description,latitude,longitude,group_id,group_name, private, views,timestamp FROM photos NATURAL JOIN users NATURAL LEFT JOIN group_photos NATURAL LEFT JOIN groups ORDER BY photo_id DESC LIMIT {$start}, {$limit}" ;
+$sql = "SELECT photo_id,username,name,image_title,description,latitude,longitude,group_id,group_name, private, views,timestamp, likes FROM photos NATURAL JOIN users NATURAL LEFT JOIN group_photos NATURAL LEFT JOIN groups NATURAL LEFT JOIN likes ORDER BY photo_id DESC LIMIT {$start}, {$limit}" ;
 $stmt = $dbConn -> prepare($sql);
 $stmt -> execute();
 $result = $stmt->fetchAll(); 
@@ -40,6 +40,7 @@ $data[] = [
     'group_name'=>$photos['group_name'],
     'private'=>$photos['private'],
     'views'=>$photos['views'],
+    'likes'=>$photos['likes'],
     'timestamp'=>$date
 ];
 }

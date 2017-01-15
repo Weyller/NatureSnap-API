@@ -68,9 +68,13 @@ function latest(){
         var image = $("<img class='card-img-top'>").attr("src",item.image_name);
         var description = $("<p class='card-text'>").append(item.description);
         var photo_id = $("<span>").append(item.photo_id);
-        var photo_link = $("<a>").attr("href","page.php?photo_id="+item.photo_id).html(item.timestamp);
+        var likeIcon = $("<li>").append("<span data-photo='"+item.photo_id+"'"+"class='like fa fa-heart-o'>").append(item.likes);
+        var commentIcon = $("<li>").append("<span class='like fa fa-comment-o'>");
+        var link = $("<a class='date'>").attr("href","page.php?photo_id="+item.photo_id).html(item.timestamp);
+        var photo_link = $("<li class='right'>").append(link);
+        var statsList = $("<ul class='stats'>").append(likeIcon,commentIcon,photo_link)
         var timestamp = $("<span>").append(item.timestamp);
-        var card = $("<div class='card-block'>").append(photo_link,description);
+        var card = $("<div class='card-block'>").append(statsList,description);
         var item = $("<div class='card'>").append(image,card);
         $(".row").append(item);
         var $container = $('.album .row');
@@ -124,6 +128,26 @@ function deletePhoto(photo_id){
             if(data=="success"){
                window.location.href="index.php";
             }
+        }
+        
+    });
+}
+function likePhoto(photo_id){
+    $.ajax({
+        url:'api/v1/likes.php',
+        type:'POST',
+        dataType:'JSON',
+        data:{
+            likeForm: '',
+            photo_id: photo_id
+        },
+        success: function(data){
+            if(data=="success"){
+               window.location.href="index.php";
+            }
+        },
+        error: function(){
+            alert("error");
         }
         
     });
